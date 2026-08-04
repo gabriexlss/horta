@@ -1,0 +1,36 @@
+.navBar{
+    position: fixed;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 40vh;
+    background-color: var(--neutral-color);
+    box-shadow: 0 4px 10px black;
+    border-radius: 16px 16px 0 0;
+    height: 10vh;
+    z-index: 100;
+    padding: 0.25rem 1rem;
+    justify-content: space-evenly;
+}
+.button{
+    display: flex;
+    width: 25%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    gap: 10px;
+    font-family: var(--font-be-vietnam-pro);
+}
+.icon{
+    transform: scale(2.5);
+}
+.selected{
+    background-color: color-mix(in hsl shorter hue, var(--secundary-color) 40%, transparent 60%);
+    color: var(--primary-color);
+}

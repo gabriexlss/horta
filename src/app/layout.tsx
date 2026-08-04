@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Quicksand, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
+import Navbar from "./components/navbar/Navbar" 
+import Header from "./components/header/Header"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const quickSand = Quicksand({
+  variable: "--font-quicksand"
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+const beVietnamPro = Be_Vietnam_Pro({
+  variable: "--font-be-vietnam-pro",
+  weight: "400"
 });
 
 export const metadata: Metadata = {
@@ -23,8 +24,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+    <html lang="pt-br" className={`${quickSand.variable} ${beVietnamPro.variable}`}>
+      <body>
+        <Header />
+        {children}
+        <Navbar />
+      </body>
     </html>
   );
 }
