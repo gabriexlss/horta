@@ -1,16 +1,18 @@
 .navBar{
     position: fixed;
-    width: 100vw;
+    width: 90vw;
     display: flex;
     flex-direction: row;
-    bottom: 0;
+    bottom: 2vh;
     left: 0;
     right: 0;
+    margin-left: 5vw;
+    margin-right: 5vw;
     margin-top: 40vh;
     background-color: var(--neutral-color);
-    box-shadow: 0 4px 10px black;
-    border-radius: 16px 16px 0 0;
-    height: 10vh;
+    box-shadow: 0 0 10px -2px black;
+    border-radius: 16px;
+    height: 9vh;
     z-index: 100;
     padding: 0.25rem 1rem;
     justify-content: space-evenly;
@@ -24,7 +26,7 @@
     font-size: 0.7rem;
     border-radius: 16px;
     border: 1px solid transparent;
-    gap: 10px;
+    gap: 12px;
     font-family: var(--font-be-vietnam-pro);
 }
 .icon{

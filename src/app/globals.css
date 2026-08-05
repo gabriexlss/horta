@@ -1,5 +1,5 @@
 :root {
-  --background: #feffc5;
+  --background: #e8e8e8;
   --foreground: #171717;
   --primary-color: #2D6A4F;
   --secundary-color: #52b788;
@@ -10,6 +10,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 html {
   height: 100%;
@@ -35,4 +36,10 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+main{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 15vh;
 }

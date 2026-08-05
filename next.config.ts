@@ -4,5 +4,11 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
 };
+module.exports = {
+  allowedDevOrigins: ['192.168.0.102'],
+  images: {
+    remotePatterns: [new URL('https://picsum.photos/**')]
+  }
+}
 
 export default nextConfig;

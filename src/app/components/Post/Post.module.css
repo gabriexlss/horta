@@ -1,0 +1,49 @@
+.post{
+    width: 95vw;
+    min-height: 45vh;
+    height: auto;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 2vh;
+}
+.post header{
+    position: relative;
+    width: 95vw;
+    height: 45vh;
+}
+.imagem{
+    object-fit: cover;
+}
+.post span{
+    background-color: var(--neutral-color);
+    position: absolute;
+    top: 25vh;
+    height: 20vh;
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    font-family: var(--font-be-vietnam-pro);
+    gap: 0.2rem;
+}
+.titulo{
+    font-family: var(--font-quicksand);
+    font-size: 1.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.data{
+    font-size: 0.8rem;
+}
+.corpo{
+    font-size: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
