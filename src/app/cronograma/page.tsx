@@ -1,8 +1,10 @@
-import React from 'react'
+import Calendario from "./Calendario"
 
 function Cronograma() {
   return (
-    <main>Cronograma</main>
+    <main>
+      <Calendario />
+    </main>
   )
 }
 

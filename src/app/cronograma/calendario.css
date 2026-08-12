@@ -1,0 +1,12 @@
+.rdp-root {
+    --rdp-accent-color: var(--primary-color);
+    --rdp-accent-background-color: #f0f0f0; 
+    --rdp-day_button-border-radius: 16px;
+    background-color: var(--neutral-color);
+    margin: 2vh 0;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    width: 95vw;
+    display: flex;
+    justify-content: center;
+}

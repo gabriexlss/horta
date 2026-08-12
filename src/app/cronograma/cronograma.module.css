@@ -1,0 +1,111 @@
+.principal{
+    width: 95vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.legenda{
+    width: 95vw;
+    background-color: var(--neutral-color);
+    min-height: 10vh;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-quicksand);
+}
+.legenda h3{
+    color: color-mix(in srgb, var(--foreground) 80%, transparent 20%);
+    font-size: 1.25rem;
+}
+.legendaItem{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    white-space: nowrap;
+    gap: 4px;
+}
+.legendaItem div{
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    width: 13px;
+    height: 13px;
+}
+.legendaContainer{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.modal{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    width: 95vw;
+    height: 60vh;
+    background-color: var(--neutral-color);
+    position: fixed;
+    z-index: 5;
+    margin-top: 1vh;
+    border: 1px solid transparent;
+    border-radius: 16px;
+    overflow: hidden;
+}
+.modal header{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    height: 8vh;
+    padding: 0 1rem;
+    font-family: var(--font-quicksand);
+    background-color: color-mix(in srgb, var(--secundary-color) 60%, transparent 40%);
+}
+.modal header h3{
+    color: var(--primary-color);
+    font-size: 1.4rem;
+}
+.modal h4{
+    font-family: var(--font-quicksand);
+    font-size: 1.1rem;
+    color: color-mix(in srgb, var(--foreground) 70%, transparent 30%);
+    margin: 2vh 0 1vh 4vw;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.modalClose{
+    transform: scale(2);
+    margin-left: auto;
+}
+.modal footer{
+    display: flex;
+    width: 100%;
+    height: 15vh;
+    flex-direction: column;
+    margin-top: auto;
+}
+.modal footer div{
+    padding: 0.5rem 1rem;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    width: 40vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 1rem;
+    margin-left: 2vw;
+
+}
+.modal p{
+    padding: 0 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 12;
+    line-clamp: 12;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
