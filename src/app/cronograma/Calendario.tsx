@@ -7,24 +7,12 @@ import "./calendario.css";
 import Legenda from "./legenda";
 import { Fragment, useState } from "react";
 import { MdClose } from "react-icons/md";
+import { Cronograma, membroEquipe } from "@/schemas/interfacesGlobais"
 
-interface MembroEquipe {
-    id: number;
-    nome: string;
-    cor: string;
-}
-
-interface Cronograma {
-    tarefa: string;
-    id: number;
-    data: string | Date;
-    equipe_id: number;
-    imprevisto: boolean;
-}
 
 interface CalendarioProps {
     cronogramas: Cronograma[];
-    equipes: MembroEquipe[];
+    equipes: membroEquipe[];
 }
 
 // Transforma uma data em "2026-08-13", para comparar o dia sem comparar objetos Date.

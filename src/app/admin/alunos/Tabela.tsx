@@ -5,17 +5,8 @@ import { useState } from "react"
 import Adicionar from "@/app/components/pop-up/Adicionar.Aluno"
 import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
+import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
 
-interface membroEquipe {
-    id: number,
-    nome: string,
-    cor: string
-}
-interface aluno {
-    nome: string,
-    id: number,
-    admin: boolean
-}
 interface tabelaProps {
     alunos: aluno[],
     equipe: membroEquipe[]

@@ -3,20 +3,11 @@ import styles from "../admin.module.css"
 import Aluno from "./aluno"
 import { MdCompareArrows } from "react-icons/md"
 import { useState } from "react"
+import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
 
-interface membroEquipe {
-    id: number,
-    nome: string,
-    cor: string
-}
-interface Aluno {
-    id: number,
-    nome: string,
-    equipe_id: number
-}
 interface equipeProps {
     equipe: membroEquipe[],
-    aluno: Aluno[]
+    aluno: aluno[]
 }
 const Equipe = ({ equipe, aluno }: equipeProps) => {
     const [equipeSelecionada, setEquipeSelecionada] = useState<number>(1)

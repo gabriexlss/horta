@@ -49,7 +49,6 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
             router.push('/admin/alunos')
             closeShowAddAluno()
         }
-
     }
     return (
         <section>
