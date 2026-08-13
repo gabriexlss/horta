@@ -1,14 +1,21 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactCompiler: true,
-};
-module.exports = {
-  allowedDevOrigins: ['192.168.0.102', '10.158.95.134'],
+  allowedDevOrigins: [
+    '192.168.3.32',
+    '192.168.0.102',
+    '10.158.95.134',
+    'localhost:3000',
+  ],
   images: {
-    remotePatterns: [new URL('https://picsum.photos/**')]
-  }
-}
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+      },
+    ],
+  },
+};
 
 export default nextConfig;
