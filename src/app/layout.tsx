@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "./components/navbar/Navbar" 
 import Header from "./components/header/Header"
 import "@daypicker/react/style.css";
+import { ToastContainer } from "react-toastify"
 
 const quickSand = Quicksand({
   variable: "--font-quicksand"
@@ -30,6 +31,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Navbar />
+        <ToastContainer />
       </body>
     </html>
   );
