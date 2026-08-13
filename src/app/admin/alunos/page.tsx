@@ -1,28 +1,15 @@
-'use client'
+import Tabela from "./Tabela"
 import styles from "../admin.module.css"
-import { MdDelete, MdEdit, MdAdd } from "react-icons/md"
+import { MdAdd } from "react-icons/md"
+import { pool } from "@/lib/db"
 
-function Alunos() {
+async function Alunos() {
+  const query = "SELECT id, nome, admin FROM alunos ORDER BY id ASC"
+  const alunos = await pool.query(query)
   return (
     <section>
-      <table className={styles.Tabela}>
-        <thead>
-          <tr>
-          <th className={styles.TabelaNome}>Nome</th>
-          <th className={styles.TabelaCargo}>Cargo</th>
-          <th colSpan={2} className={styles.TabelaAcoes}>Ações</th>
-        </tr>
-        </thead>
-        <tbody>
-          <tr>
-          <td>Gabriel</td>
-          <td className={styles.Cargo}>Comum</td>
-          <td><MdDelete className={styles.TabelaIcon}/></td>
-          <td><MdEdit className={styles.TabelaIcon}/></td>
-        </tr>
-        </tbody>
-      </table>
-      <button className={styles.addMore}><MdAdd/></button>
+      <Tabela alunos={alunos.rows}/>
+      <button className={styles.addMore}><MdAdd /></button>
     </section>
   )
 }

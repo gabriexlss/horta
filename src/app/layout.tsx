@@ -15,7 +15,7 @@ const beVietnamPro = Be_Vietnam_Pro({
 });
 
 export const metadata: Metadata = {
-  title: "Horta",
+  title: "Horta - 3DSA2026",
   description: "Site para gerenciar os posts e o cronograma da horta do 3DSA 2026 da Etec Jardim Angela",
 };
 
