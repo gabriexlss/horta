@@ -40,7 +40,7 @@
 .modal{
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: flex-start;
 
     width: 95vw;
@@ -78,27 +78,46 @@
 .modalClose{
     transform: scale(2);
     margin-left: auto;
+    border: 0;
+    background: transparent;
+    color: var(--foreground);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 .modal footer{
     display: flex;
     width: 100%;
-    height: 15vh;
-    flex-direction: column;
+    height: 8vh;
+    flex-direction: row;
     margin-top: auto;
+    flex-direction: row;
+    align-items: center;
+    padding: 1rem;
+    gap: 0.2rem;
+    background-color: var(--secundary-color);
 }
-.modal footer div{
-    padding: 0.5rem 1rem;
+.footerEquipe{
+    display: flex;
+    font-family: var(--font-quicksand);
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--foreground) 70%, transparent 30%);
+    font-weight: bold;
+    text-transform: uppercase;
     border-radius: 16px;
     border: 1px solid transparent;
-    width: 40vw;
+    padding: 0.2rem 0.4rem;
+}
+.footerTitulo{
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-family: var(--font-be-vietnam-pro);
-    font-size: 1rem;
-    margin-left: 2vw;
-
+    font-family: var(--font-quicksand);
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--foreground) 70%, transparent 30%);
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 16px;
+    border: 1px solid transparent;
+    padding: 0.2rem 0.4rem;
 }
 .modal p{
     padding: 0 1rem;
@@ -108,4 +127,5 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
 }

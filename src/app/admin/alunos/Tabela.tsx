@@ -25,19 +25,24 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
     const [showAddAluno, setShowAddAluno] = useState(false);
     const router = useRouter()
 
-    const deletarAluno = async (id:number) => {
-        if(!id) return
+    const deletarAluno = async (id: number) => {
+        if (!id) return
 
-        const response = await fetch(`/api/aluno/excluir/${String(id)}`,{
-            method: 'delete'
-        })
-
-        if(!response.ok){
-            notify.erro("Erro ao Deleter Aluno")
-        }else{
-            notify.sucesso("Aluno Deletado com sucesso")
+        try {
+            const response = await fetch(`/api/aluno/excluir/${String(id)}`, {
+                method: 'delete'
+            })
+            const resposta = await response.json()
+            if (!response.ok) {
+                notify.erro(resposta.msg)
+            } else if(response.ok){
+                notify.sucesso(resposta.msg)
+            }
+        } catch {
+            notify.erro("Erro desconhecido ao deleter Aluno")
+        } finally {
+            router.push('/admin/alunos')
         }
-        router.push('/admin/alunos')
     }
     return (
         <div>

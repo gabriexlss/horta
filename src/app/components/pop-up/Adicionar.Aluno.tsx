@@ -26,24 +26,30 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
     if (!showAddAluno) {
         return null;
     }
-    const enviarForm = async (dataForm:alunoCriar) => {
-        if(!dataForm) return
+    const enviarForm = async (dataForm: alunoCriar) => {
+        if (!dataForm) return
 
-        const response = await fetch('/api/aluno/criar', {
-            method: 'POST',
-            headers: {
-                'content-type': 'application/json'
-            },
-            body: JSON.stringify(dataForm)
-        })
-        const dados = await response.json()
-        if(!response.ok){
-            notify.erro(dados.msg)
-        }else{
-            notify.sucesso(dados.msg)
+        try {
+            const response = await fetch('/api/aluno/criar', {
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
+                },
+                body: JSON.stringify(dataForm)
+            })
+            const dados = await response.json()
+            if (!response.ok) {
+                notify.erro(dados.msg)
+            } else if(response.ok){
+                notify.sucesso(dados.msg)
+            }
+        } catch {
+            notify.erro("Erro ao processar a solicitação de apagar")
+        } finally {
+            router.push('/admin/alunos')
+            closeShowAddAluno()
         }
-        router.push('/admin/alunos')
-        closeShowAddAluno()
+
     }
     return (
         <section>
@@ -77,7 +83,7 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                         </select>
                     </div>
                     <div className={styles.PopUpButtons}>
-                        <button onClick={() => enviarForm({nome, admin, equipe_id: equipeId})}>Salvar Aluno</button>
+                        <button onClick={() => enviarForm({ nome, admin, equipe_id: equipeId })}>Salvar Aluno</button>
                         <button onClick={closeShowAddAluno}>Cancelar</button>
                     </div>
                 </div>
