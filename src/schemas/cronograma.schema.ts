@@ -2,7 +2,7 @@ import { z } from "zod"
 
 const CronogramaSchema = z.object({
     id: z.number().int(),
-    data: z.string(),
+    data: z.string().date(),
     tarefa: z.string().min(5),
     equipe_id: z.number(),
     imprevisto: z.boolean()

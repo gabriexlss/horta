@@ -1,6 +1,8 @@
 import Calendario from "./Calendario"
 import { pool }  from "@/lib/db"
 
+export const dynamic = "force-dynamic"
+
 async function Cronograma() {
   const queryEquipes = "SELECT * FROM equipes ORDER BY id ASC"
   const equipes = await pool.query(queryEquipes)
