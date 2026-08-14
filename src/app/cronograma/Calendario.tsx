@@ -53,6 +53,8 @@ const Calendario = () => {
                 </div>
             </footer>
             {modal && (
+                <>
+                <div className={styles.fundoBlur}></div>
                 <div className={styles.modal}>
                     <header>
                         <h3>{`${new Intl.DateTimeFormat("pt-BR", {day: "2-digit", month: "long"}).format(modal)}`}</h3>
@@ -74,6 +76,7 @@ const Calendario = () => {
                         </div>
                     </footer>
                 </div>
+            </>
             )}
         </section>
     );

@@ -13,7 +13,7 @@
     box-shadow: 0 0 10px -2px black;
     border-radius: 16px;
     height: 9vh;
-    z-index: 100;
+    z-index: 4;
     padding: 0.25rem 1rem;
     justify-content: space-evenly;
 }

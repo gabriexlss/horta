@@ -1,5 +1,5 @@
 'use client'
-import styles from './AddAluno.module.css'
+import styles from '../PopUp.module.css'
 import { MdClose } from "react-icons/md"
 
 interface PopUpProps {
@@ -15,10 +15,10 @@ function Adicionar({ showAddAluno, closeShowAddAluno }: PopUpProps) {
             <div className={styles.AddPopUp}>
                 <div className={styles.AddPopUpContent}>
                     <div className={styles.PopUpHeader}>
+                        <h1>Adicionar Novo Aluno</h1>
                         <button className={styles.modalClose} onClick={closeShowAddAluno}>
                             <MdClose />
                         </button>
-                        <h1>Adicionar Novo Aluno</h1>
                     </div>
                     <div className={styles.PopUpNome}>
                         <label htmlFor="nome">Nome Completo</label>

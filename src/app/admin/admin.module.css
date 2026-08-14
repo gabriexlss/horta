@@ -188,3 +188,7 @@
     bottom: 14vh;
     right: 8vw;
 }
+.remove{
+    background-color: transparent;
+    border: transparent;
+}

@@ -2,10 +2,11 @@
 import styles from "../admin.module.css"
 import { MdDelete, MdEdit, MdAdd } from "react-icons/md"
 import { useState } from "react"
-import Adicionar from "@/app/components/pop-up/Adicionar.Aluno"
+import { Adicionar, Remover } from "@/app/components/pop-up/page"
 
 function Alunos() {
   const [showAddAluno, setShowAddAluno] = useState(false);
+  const [showRmvAluno, setShowRmvAluno] = useState(false);
   return (
     <section>
       <table className={styles.Tabela}>
@@ -20,7 +21,7 @@ function Alunos() {
           <tr>
             <td>Gabriel</td>
             <td className={styles.Cargo}>Comum</td>
-            <td><MdDelete className={styles.TabelaIcon} /></td>
+            <td><button className={styles.remove} onClick={() => setShowRmvAluno(true)}><MdDelete className={styles.TabelaIcon} /></button></td>
             <td><MdEdit className={styles.TabelaIcon} /></td>
           </tr>
         </tbody>
@@ -33,6 +34,7 @@ function Alunos() {
         <MdAdd />
       </button>
       {showAddAluno && <Adicionar showAddAluno={showAddAluno} closeShowAddAluno={() => setShowAddAluno(false)} />}
+      {showRmvAluno && <Remover showRmvAluno={showRmvAluno} closeShowRmvAluno={() => setShowRmvAluno(false)} />}
     </section>
   )
 }
