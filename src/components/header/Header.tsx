@@ -6,6 +6,9 @@ const Header = () => {
     const pathname = usePathname()
 
     const titulo = (() => {
+        if (pathname.startsWith("/post/")) {
+            return "Detalhes do Post";
+        }
         switch (pathname) {
             case "/":
                 return "Feed";

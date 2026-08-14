@@ -19,4 +19,13 @@ export const CriarPostSchema = PostSchema.pick({
     imagem_file: true,
     data: true
 })
+export const PegarPostSchema = PostSchema.pick({
+    id: true,
+    equipe_id: true,
+    titulo: true,
+    descricao: true,
+    imagem_url: true,
+    data: true
+})
+export type Post = z.infer<typeof PegarPostSchema>
 export type CriarPost = z.infer<typeof CriarPostSchema>

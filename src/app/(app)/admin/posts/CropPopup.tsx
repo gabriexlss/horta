@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Cropper, { Area } from "react-easy-crop"
 import { MdClose } from "react-icons/md"
-import Popup from "../../components/pop-up/Popup"
+import Popup from "@/components/pop-up/Popup"
 import styles from "./CropPopup.module.css"
 
 interface CropPopupProps {

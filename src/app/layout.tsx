@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Quicksand, Be_Vietnam_Pro } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/navbar/Navbar" 
-import Header from "./components/header/Header"
 import "@daypicker/react/style.css";
 import { ToastContainer } from "react-toastify"
 
@@ -28,9 +26,7 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className={`${quickSand.variable} ${beVietnamPro.variable}`} >
       <body>
-        <Header />
         {children}
-        <Navbar />
         <ToastContainer />
       </body>
     </html>

@@ -1,4 +1,4 @@
-import Post from "@/app/components/Post/Post"
+import Post from "@/components/Post/Post"
 interface post{
     id: number,
     titulo: string,
@@ -15,7 +15,7 @@ const Posts = ({post}: PostsProps) => {
     return (
         <section>
             {post.map(post => (
-                <Post titulo={post.titulo} corpo={post.descricao} imagem={post.imagem_url} data={post.data} link={"/cronograma"} key={post.id} />
+                <Post titulo={post.titulo} corpo={post.descricao} imagem={post.imagem_url} data={post.data} link={`/post/${post.id}`} key={post.id} />
             ))}
         </section>
     )
