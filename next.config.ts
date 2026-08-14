@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
 module.exports = {
   allowedDevOrigins: ['192.168.0.102', '10.158.95.134'],
   images: {
-    remotePatterns: [new URL('https://picsum.photos/**')]
+    remotePatterns: [new URL(`https://${process.env['R2_PUBLIC_URL']}/**`)]
   }
 }
 

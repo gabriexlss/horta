@@ -1,0 +1,85 @@
+.modal {
+    width: min(100%, 38rem);
+    padding: 1.25rem;
+    border-radius: 16px;
+    background-color: var(--neutral-color);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.header h1 {
+    margin: 0;
+    color: var(--primary-color);
+    font-family: var(--font-quicksand);
+    font-size: 1.35rem;
+}
+
+.header p {
+    margin: 0.35rem 0 1rem;
+    font-family: var(--font-be-vietnam-pro);
+}
+
+.fechar {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.areaCrop {
+    position: relative;
+    width: 100%;
+    height: min(65vw, 24rem);
+    overflow: hidden;
+    border-radius: 12px;
+    background: #1f1f1f;
+}
+
+.zoom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-top: 1rem;
+    font-family: var(--font-be-vietnam-pro);
+}
+
+.zoom input { width: 100%; }
+
+.acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.acoes button {
+    min-height: 2.5rem;
+    padding: 0 1rem;
+    border-radius: 8px;
+    font-family: var(--font-be-vietnam-pro);
+    cursor: pointer;
+}
+
+.cancelar {
+    border: 1px solid var(--primary-color);
+    background: var(--neutral-color);
+    color: var(--primary-color);
+}
+
+.confirmar {
+    border: 1px solid var(--primary-color);
+    background: var(--primary-color);
+    color: var(--background);
+}
+
+.confirmar:disabled { cursor: wait; opacity: 0.65; }
