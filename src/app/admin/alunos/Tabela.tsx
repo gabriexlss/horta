@@ -2,7 +2,8 @@
 import styles from "../admin.module.css"
 import { MdDelete, MdEdit, MdAdd } from "react-icons/md"
 import { useState } from "react"
-import Adicionar from "@/app/components/pop-up/Adicionar.Aluno"
+import Adicionar from "@/app/components/pop-up/adicionar-aluno/Adicionar.Aluno"
+import RemoverAluno from "@/app/components/pop-up/remover-aluno/Remover.Aluno"
 import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
 import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
@@ -14,6 +15,7 @@ interface tabelaProps {
 
 const Tabela = ({ alunos, equipe }: tabelaProps) => {
     const [showAddAluno, setShowAddAluno] = useState(false);
+    const [alunoParaRemover, setAlunoParaRemover] = useState<aluno | null>(null)
     const router = useRouter()
 
     const deletarAluno = async (id: number) => {
@@ -32,7 +34,8 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
         } catch {
             notify.erro("Erro desconhecido ao deleter Aluno")
         } finally {
-            router.push('/admin/alunos')
+            router.refresh()
+            setAlunoParaRemover(null)
         }
     }
     return (
@@ -52,7 +55,16 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
                                 <tr key={a.id}>
                                     <td>{a.nome}</td>
                                     <td className={styles.Cargo}>{a.admin === true ? "admin" : "comum"}</td>
-                                    <td onClick={() => deletarAluno(a.id)}><MdDelete className={styles.TabelaIcon} /></td>
+                                    <td>
+                                        <button
+                                            aria-label={`Excluir ${a.nome}`}
+                                            className={styles.remove}
+                                            onClick={() => setAlunoParaRemover(a)}
+                                            type="button"
+                                        >
+                                            <MdDelete className={styles.TabelaIcon} />
+                                        </button>
+                                    </td>
                                     <td><MdEdit className={styles.TabelaIcon} /></td>
                                 </tr>
                             ))
@@ -72,6 +84,13 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
                 <MdAdd />
             </button>
             {showAddAluno && <Adicionar equipes={equipe} showAddAluno={showAddAluno} closeShowAddAluno={() => setShowAddAluno(false)} />}
+            {alunoParaRemover && (
+                <RemoverAluno
+                    alunoNome={alunoParaRemover.nome}
+                    onCancelar={() => setAlunoParaRemover(null)}
+                    onConfirmar={() => deletarAluno(alunoParaRemover.id)}
+                />
+            )}
         </div>
     )
 }

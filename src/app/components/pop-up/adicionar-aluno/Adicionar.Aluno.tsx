@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styles from './AddAluno.module.css'
 import { MdClose } from "react-icons/md"
+import Popup from "../Popup"
 import { alunoCriar } from '@/schemas/aluno.schema';
 import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
@@ -51,15 +52,13 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
         }
     }
     return (
-        <section>
-            <div className={styles.AddPopUp}>
-                <div className={styles.AddPopUpContent}>
-                    <div className={styles.PopUpHeader}>
-                        <button className={styles.modalClose} onClick={closeShowAddAluno}>
-                            <MdClose />
-                        </button>
-                        <h1>Adicionar Novo Aluno</h1>
-                    </div>
+        <Popup className={styles.AddPopUpContent} labelledBy="titulo-adicionar-aluno" onClose={closeShowAddAluno}>
+            <div className={styles.PopUpHeader}>
+                <button aria-label="Fechar" className={styles.modalClose} onClick={closeShowAddAluno} type="button">
+                    <MdClose />
+                </button>
+                <h1 id="titulo-adicionar-aluno">Adicionar Novo Aluno</h1>
+            </div>
                     <div className={styles.PopUpNome}>
                         <label htmlFor="nome">Nome Completo</label>
                         <input type="text" id="nome" placeholder="Ex: João Silva" value={nome} onChange={e => { setNome(e.target.value) }} />
@@ -81,13 +80,11 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                             }
                         </select>
                     </div>
-                    <div className={styles.PopUpButtons}>
-                        <button onClick={() => enviarForm({ nome, admin, equipe_id: equipeId })}>Salvar Aluno</button>
-                        <button onClick={closeShowAddAluno}>Cancelar</button>
-                    </div>
-                </div>
+            <div className={styles.PopUpButtons}>
+                <button onClick={() => enviarForm({ nome, admin, equipe_id: equipeId })} type="button">Salvar Aluno</button>
+                <button onClick={closeShowAddAluno} type="button">Cancelar</button>
             </div>
-        </section>
+        </Popup>
     )
 }
 

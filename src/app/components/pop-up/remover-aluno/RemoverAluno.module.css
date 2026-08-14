@@ -1,0 +1,59 @@
+.modal {
+    width: min(100%, 32rem);
+    border-radius: 16px;
+    padding: 1.35rem;
+    background-color: var(--neutral-color);
+    font-family: var(--font-be-vietnam-pro);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.header h1 {
+    color: var(--primary-color);
+    font-family: var(--font-quicksand);
+    font-size: 1.35rem;
+}
+
+.close {
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 0;
+    background: transparent;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
+.actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.actions button {
+    flex: 1;
+    height: 2.5rem;
+    border-radius: 8px;
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.cancel {
+    border: 1px solid var(--primary-color);
+    background: var(--neutral-color);
+    color: var(--primary-color);
+}
+
+.delete {
+    border: 1px solid #b91c1c;
+    background: #dc2626;
+    color: white;
+}

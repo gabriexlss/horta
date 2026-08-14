@@ -100,7 +100,9 @@ const Calendario = ({ cronogramas, equipes }: CalendarioProps) => {
             </footer>
 
             {modal && (
-                <div className={styles.modal}>
+                <>
+                    <div className={styles.fundoBlur}></div>
+                    <div className={styles.modal}>
                     <header>
                         <h3>{new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long" }).format(modal)}</h3>
                         <button type="button" className={styles.modalClose} onClick={fecharModal} aria-label="Fechar modal">
@@ -134,7 +136,8 @@ const Calendario = ({ cronogramas, equipes }: CalendarioProps) => {
                             );
                         })
                     )}
-                </div>
+                    </div>
+                </>
             )}
         </section>
     );
