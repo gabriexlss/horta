@@ -1,6 +1,6 @@
 'use client'
 import styles from "../admin.module.css"
-import { MdDelete, MdEdit, MdAdd } from "react-icons/md"
+import { MdDelete, MdAdd } from "react-icons/md"
 import { useState } from "react"
 import Adicionar from "@/app/components/pop-up/adicionar-aluno/Adicionar.Aluno"
 import RemoverAluno from "@/app/components/pop-up/remover-aluno/Remover.Aluno"
@@ -40,42 +40,33 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
     }
     return (
         <div>
-            <table className={styles.Tabela}>
-                <thead>
-                    <tr>
-                        <th className={styles.TabelaNome}>Nome</th>
-                        <th className={styles.TabelaCargo}>Cargo</th>
-                        <th colSpan={2} className={styles.TabelaAcoes}>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        alunos && alunos.length > 0 ?
-                            alunos.map(a => (
-                                <tr key={a.id}>
-                                    <td>{a.nome}</td>
-                                    <td className={styles.Cargo}>{a.admin === true ? "admin" : "comum"}</td>
-                                    <td>
-                                        <button
-                                            aria-label={`Excluir ${a.nome}`}
-                                            className={styles.remove}
-                                            onClick={() => setAlunoParaRemover(a)}
-                                            type="button"
-                                        >
-                                            <MdDelete className={styles.TabelaIcon} />
-                                        </button>
-                                    </td>
-                                    <td><MdEdit className={styles.TabelaIcon} /></td>
-                                </tr>
-                            ))
-                            :
-                            <tr>
-                                <td colSpan={4}>Nenhum Aluno Cadastrado Ainda</td>
-                            </tr>
-                    }
-
-                </tbody>
-            </table>
+            <section aria-label="Lista de alunos" className={styles.listaAlunos}>
+                <header className={styles.cabecalhoAlunos}>
+                    <span>Nome</span>
+                    <span>Cargo</span>
+                    <span className={styles.acoes}>Ações</span>
+                </header>
+                {alunos && alunos.length > 0 ? (
+                    alunos.map((aluno) => (
+                        <article className={styles.linhaAluno} key={aluno.id}>
+                            <strong className={styles.nomeAluno}>{aluno.nome}</strong>
+                            <span className={`${styles.cargo} ${aluno.admin ? styles.cargoAdmin : styles.cargoComum}`}>
+                                {aluno.admin ? "Admin" : "Aluno"}
+                            </span>
+                            <button
+                                aria-label={`Excluir ${aluno.nome}`}
+                                className={styles.remove}
+                                onClick={() => setAlunoParaRemover(aluno)}
+                                type="button"
+                            >
+                                <MdDelete />
+                            </button>
+                        </article>
+                    ))
+                ) : (
+                    <p className={styles.listaVazia}>Nenhum aluno cadastrado ainda.</p>
+                )}
+            </section>
             <button
                 aria-label="Adicionar Aluno"
                 className={styles.addMore}
