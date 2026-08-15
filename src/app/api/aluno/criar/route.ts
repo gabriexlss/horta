@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { pool } from "@/lib/db"
 import { alunoCriarSchema } from "@/schemas/aluno.schema"
+import { revalidatePath } from "next/cache";
 
 export async function POST(req:NextRequest) {
     const res = NextResponse
@@ -22,6 +23,7 @@ export async function POST(req:NextRequest) {
             valores.push(admin, senha)
         }
         await pool.query(query, valores)
+        revalidatePath('/admin/alunos')
         return res.json({msg: "Aluno Criado com Sucesso."}, {status: 201})
     }catch(erro){
         console.error("erro no endpoint de criação de  aluno, erro: ", erro)

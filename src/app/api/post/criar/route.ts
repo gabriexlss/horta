@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
             }
             throw new Error(String(erro))
         }
-        revalidatePath("/cronograma")
+        revalidatePath("/")
 
         return res.json({ msg: "Post Criado com Sucesso." }, { status: 201 })
     } catch (erro) {
