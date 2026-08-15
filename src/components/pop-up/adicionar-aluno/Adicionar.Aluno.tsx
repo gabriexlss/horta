@@ -73,6 +73,7 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                     <div className={styles.PopUpEquipe}>
                         <label htmlFor="equipe">Equipe</label>
                         <select name="equipe" id="equipe" value={equipeId} onChange={e => { setEquipeId(Number(e.target.value)) }}>
+                            <option value="" hidden>Selecione uma equipe</option>
                             {
                                 equipes.map(e => (
                                     <option key={e.id} value={e.id}>{e.nome}</option>

@@ -19,7 +19,7 @@ function RemoverAluno({ alunoNome, onCancelar, onConfirmar }: RemoverAlunoProps)
                     <MdClose />
                 </button>
             </header>
-            <p>
+            <p> 
                 Tem certeza que deseja excluir <strong>{alunoNome}</strong>? Esta ação não pode ser desfeita.
             </p>
             <footer className={styles.actions}>

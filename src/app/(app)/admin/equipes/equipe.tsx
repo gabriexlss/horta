@@ -4,6 +4,7 @@ import Aluno from "./aluno"
 import { MdCompareArrows } from "react-icons/md"
 import { useState } from "react"
 import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
+import TransferirAluno from "@/components/pop-up/transferir-aluno/Transferir.Aluno"
 
 interface equipeProps {
     equipe: membroEquipe[],
@@ -11,6 +12,7 @@ interface equipeProps {
 }
 const Equipe = ({ equipe, aluno }: equipeProps) => {
     const [equipeSelecionada, setEquipeSelecionada] = useState<number>(1)
+    const [showTransferirAluno, setShowTransferirAluno] = useState(false)
     return (
         <div>
             <div className={styles.campo} id={styles.equipeCampo}>
@@ -47,13 +49,17 @@ const Equipe = ({ equipe, aluno }: equipeProps) => {
                 })()}
 
                 <div className={styles.campo}>
-                    <button>
+                    <button
+                        aria-label="Adicionar Aluno"
+                        onClick={() => setShowTransferirAluno(true)}
+                    >
                         <MdCompareArrows className={styles.botaoIcone} />
                         Transferir Aluno
                     </button>
                 </div>
-            </div>
-        </div>
+            </div> 
+            {showTransferirAluno && <TransferirAluno equipes={equipe} showTransferirAluno={showTransferirAluno} closeShowTransferirAluno={() => setShowTransferirAluno(false)} />}
+        </div >
     )
 }
 
