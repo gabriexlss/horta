@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { pool } from "@/lib/db"
 import { alunoCriarSchema } from "@/schemas/aluno.schema"
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcrypt"
 
 export async function POST(req:NextRequest) {
     const res = NextResponse
@@ -17,10 +18,11 @@ export async function POST(req:NextRequest) {
         if(admin && !senha){
             return res.json({msg: "A Senha tem que ser inserida para admnistradores"},{status: 400})
         }
-        const query = `INSERT INTO alunos (nome, equipe_id ${admin && senha ? ' admin, senha': ''}) VALUES ($1, $2 ${admin && senha ? ' $3, $4': ''})`
+        const query = `INSERT INTO alunos (nome, equipe_id${admin && senha ? ', admin, senha': ''}) VALUES ($1, $2${admin && senha ? ', $3, $4': ''})`
         const valores: (string | number | boolean)[] = [nome, equipe_id]
         if(admin && senha){
-            valores.push(admin, senha)
+            const senhaHash = await bcrypt.hash(senha, 10)
+            valores.push(admin, senhaHash)
         }
         await pool.query(query, valores)
         revalidatePath('/admin/alunos')

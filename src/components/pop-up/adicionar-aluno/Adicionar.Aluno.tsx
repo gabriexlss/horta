@@ -41,7 +41,7 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
             const dados = await response.json()
             if (!response.ok) {
                 notify.erro(dados.msg)
-            } else if(response.ok){
+            } else if (response.ok) {
                 notify.sucesso(dados.msg)
             }
         } catch {
@@ -59,30 +59,38 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                 </button>
                 <h1 id="titulo-adicionar-aluno">Adicionar Novo Aluno</h1>
             </div>
+            <div className={styles.PopUpNome}>
+                <label htmlFor="nome">Nome Completo</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva" value={nome} onChange={e => { setNome(e.target.value) }} />
+            </div>
+            <div className={styles.PopUpAdmin}>
+                <label htmlFor="admin">Acesso Administrativo?</label>
+                <label htmlFor="admin" className={styles.switch}>
+                    <input type="checkbox" id="admin" checked={admin} onChange={e => { setAdmin(e.target.checked) }} />
+                    <span className={styles.slider}></span>
+                </label>
+            </div>
+            {
+                admin && (
                     <div className={styles.PopUpNome}>
-                        <label htmlFor="nome">Nome Completo</label>
-                        <input type="text" id="nome" placeholder="Ex: João Silva" value={nome} onChange={e => { setNome(e.target.value) }} />
+                        <label htmlFor="senha">Senha</label>
+                        <input type="password" id="senha" placeholder="Digite sua senha de admin." value={senha} onChange={e => { setSenha(e.target.value) }} />
                     </div>
-                    <div className={styles.PopUpAdmin}>
-                        <label htmlFor="admin">Acesso Administrativo?</label>
-                        <label htmlFor="admin" className={styles.switch}>
-                            <input type="checkbox" id="admin" checked={admin} onChange={e => { setAdmin(e.target.checked) }} />
-                            <span className={styles.slider}></span>
-                        </label>
-                    </div>
-                    <div className={styles.PopUpEquipe}>
-                        <label htmlFor="equipe">Equipe</label>
-                        <select name="equipe" id="equipe" value={equipeId} onChange={e => { setEquipeId(Number(e.target.value)) }}>
-                            <option value="" hidden>Selecione uma equipe</option>
-                            {
-                                equipes.map(e => (
-                                    <option key={e.id} value={e.id}>{e.nome}</option>
-                                ))
-                            }
-                        </select>
-                    </div>
+                )
+            }
+            <div className={styles.PopUpEquipe}>
+                <label htmlFor="equipe">Equipe</label>
+                <select name="equipe" id="equipe" value={equipeId} onChange={e => { setEquipeId(Number(e.target.value)) }}>
+                    <option value="" hidden>Selecione uma equipe</option>
+                    {
+                        equipes.map(e => (
+                            <option key={e.id} value={e.id}>{e.nome}</option>
+                        ))
+                    }
+                </select>
+            </div>
             <div className={styles.PopUpButtons}>
-                <button onClick={() => enviarForm({ nome, admin, equipe_id: equipeId })} type="button">Salvar Aluno</button>
+                <button onClick={() => enviarForm({ nome, admin, equipe_id: equipeId, senha })} type="button">Salvar Aluno</button>
                 <button onClick={closeShowAddAluno} type="button">Cancelar</button>
             </div>
         </Popup>
