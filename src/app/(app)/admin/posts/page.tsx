@@ -1,4 +1,5 @@
 import Formulario from "./Formulario"
+import Actions from "./actions"
 import { pool } from "@/lib/db"
 
 async function Posts() {
@@ -8,6 +9,7 @@ async function Posts() {
   return (
     <section>
       <Formulario equipes={equipes.rows}/>
+      <Actions />
     </section>
   )
 }

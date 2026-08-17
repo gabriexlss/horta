@@ -1,4 +1,5 @@
 import CronogramaForm from "./cronograma"
+import Actions from "./actions"
 import { pool } from "@/lib/db"
 
 async function Cronograma() {
@@ -8,6 +9,7 @@ async function Cronograma() {
   return (
     <section>
       <CronogramaForm equipes={equipes.rows}/>
+      <Actions />
     </section>
   )
 }
