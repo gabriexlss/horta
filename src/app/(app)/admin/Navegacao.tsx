@@ -11,6 +11,7 @@ const Navegacao = () => {
             <Link href={"/admin/equipes"} className={`${styles.link} ${pathname == "/admin/equipes" ? styles.selected : ""}`} >Gestão de Equipes</Link>
             <Link href={"/admin/posts"} className={`${styles.link} ${pathname == "/admin/posts" ? styles.selected : ""}`} >Gestão de Posts</Link>
             <Link href={"/admin/alunos"} className={`${styles.link} ${pathname == "/admin/alunos" ? styles.selected : ""}`} >Gestão de Alunos</Link>
+            <Link href={"/admin/login"} className={`${styles.link} ${pathname == "/admin/login" ? styles.selected : ""}`} >Login</Link>
         </nav>
     )
 }
