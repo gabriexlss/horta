@@ -17,9 +17,11 @@ export async function POST(req:NextRequest) {
         const dadosValidados  = cronogramaCriarSchema.safeParse(body)
 
         if(!dadosValidados.success){
-            return res.json({msg: "Dados Invalidos.", erro: dadosValidados.error.format()},{status: 400})
+            const primeiroErro = dadosValidados.error.issues[0]?.message || "Dados inválidos."
+            return res.json({msg: primeiroErro, erro: dadosValidados.error.format()},{status: 400})
         }
         const { equipe_id, data, tarefa } = dadosValidados.data
+
 
         const query = `
             INSERT INTO cronogramas (data, equipe_id, tarefa)

@@ -11,9 +11,11 @@ export async function POST(req:NextRequest) {
         const dadosValidados  = alunoCriarSchema.safeParse(body)
 
         if(!dadosValidados.success){
-            return res.json({msg: "Dados Invalidos.", erro: dadosValidados.error.format()},{status: 400})
+            const primeiroErro = dadosValidados.error.issues[0]?.message || "Dados inválidos."
+            return res.json({msg: primeiroErro, erro: dadosValidados.error.format()},{status: 400})
         }
         const { nome, admin, equipe_id, senha } = dadosValidados.data
+
 
         if(admin && !senha){
             return res.json({msg: "A Senha tem que ser inserida para admnistradores"},{status: 400})

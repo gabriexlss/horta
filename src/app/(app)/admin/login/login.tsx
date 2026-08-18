@@ -1,15 +1,13 @@
 'use client'
 import styles from "./login.module.css"
 import { MdPark } from "react-icons/md"
-import { useState } from "react"
 import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
-import TransferirAluno from "@/components/pop-up/transferir-aluno/Transferir.Aluno"
 
 interface equipeProps {
     equipe: membroEquipe[],
     aluno: aluno[]
 }
-const Equipe = ({ equipe, aluno }: equipeProps) => {
+const Equipe = ({ aluno }: equipeProps) => {
 
     return (
         <section className={styles.loginBg}>
@@ -18,18 +16,18 @@ const Equipe = ({ equipe, aluno }: equipeProps) => {
                 <h1>Projeto Horta</h1>
                 <h6>Acesso ao Painel</h6>
                 <div className={styles.selectContainer}>
-                    <label htmlFor="email">Ecolher Aluno</label>
-                    <select name="aluno" id="aluno">
-                        {aluno.map((aluno) => (
-                            <option key={aluno.id} value={aluno.id}>{aluno.nome}</option>
+                    <label htmlFor="aluno">Escolher Aluno</label>
+                    <select name="aluno" id="aluno" required>
+                        {aluno.map((a) => (
+                            <option key={a.id} value={a.id}>{a.nome}</option>
                         ))}
                     </select>
                 </div>
                 <div className={styles.inputContainer}>
-                <label htmlFor="Senha">Senha</label>
-                <input type="password" name="senha" id="senha" />
+                    <label htmlFor="senha">Senha</label>
+                    <input type="password" name="senha" id="senha" minLength={6} maxLength={255} required />
                 </div>
-                <button>Entrar no Painel</button>
+                <button type="submit">Entrar no Painel</button>
             </div>
         </section>
     )
