@@ -44,6 +44,14 @@
     font-family: var(--font-be-vietnam-pro);
     font-size: .85rem;
     cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.actions button:disabled,
+.close:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
 }
 
 .cancel {
@@ -57,3 +65,4 @@
     background: #dc2626;
     color: white;
 }
+

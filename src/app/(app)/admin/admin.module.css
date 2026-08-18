@@ -215,12 +215,13 @@
 }
 .addMore{
     position: fixed;
-    width: 50px;
-    height: 50px;
-    background-color: var(--neutral-color);
+    width: 52px;
+    height: 52px;
+    background-color: var(--primary-color);
+    color: var(--background);
     border: 1px solid transparent;
     border-radius: 16px;
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-family: var(--font-be-vietnam-pro);
     display: flex;
     flex-direction: column;
@@ -228,6 +229,17 @@
     justify-content: center;
     bottom: 14vh;
     right: 8vw;
+    box-shadow: 0 6px 18px color-mix(in srgb, var(--primary-color) 35%, transparent);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 5;
+}
+.addMore:hover{
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--primary-color) 45%, transparent);
+}
+.addMore:active{
+    transform: translateY(0) scale(0.95);
 }
 .remove{
     display: grid;
@@ -240,40 +252,229 @@
     color: #dc2626;
     cursor: pointer;
     font-size: 1.25rem;
+    transition: all 0.2s ease;
 }
 .remove:hover{
     background-color: #dc2626;
     color: white;
+    transform: scale(1.05);
+}
+.remove:active{
+    transform: scale(0.95);
 }
 .Acoes{
-    flex-direction: row;
-    background-color: var(--neutral-color);
-    width: 100%;
     display: flex;
-    margin-top: 1vh;
-    padding: 0.5rem;
+    flex-direction: column;
+    background-color: var(--neutral-color);
+    width: 95vw;
+    margin-top: 1.25rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
     border-radius: 16px;
-    justify-content: center;
-    gap: 5vw;
+    box-shadow: 0 4px 16px color-mix(in srgb, var(--foreground) 5%, transparent);
+    gap: 0.85rem;
 }
+.AcoesHeader{
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0 0.25rem;
+}
+.AcoesHeaderTitulo{
+    font-family: var(--font-quicksand);
+    font-size: 0.825rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: color-mix(in srgb, var(--foreground) 60%, transparent);
+}
+.AcoesHeaderIcone{
+    font-size: 1.1rem;
+    color: var(--primary-color);
+}
+.AcoesGrid{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    width: 100%;
+}
+.AcaoBotao{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    border-radius: 14px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    background-color: var(--background);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    text-align: left;
+    outline: none;
+    user-select: none;
+    width: 100%;
+}
+.AcaoBotao:focus-visible{
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+.AcaoBotao:hover{
+    transform: translateY(-2px);
+}
+.AcaoBotao:active{
+    transform: translateY(0) scale(0.98);
+}
+.AcaoIconeWrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    min-width: 2.6rem;
+    border-radius: 12px;
+    font-size: 1.35rem;
+    transition: transform 0.2s ease;
+}
+.AcaoBotao:hover .AcaoIconeWrapper{
+    transform: scale(1.08);
+}
+.AcaoTexto{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+.AcaoTitulo{
+    font-family: var(--font-quicksand);
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.AcaoDescricao{
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 0.75rem;
+    line-height: 1.2;
+    opacity: 0.8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Variantes de cores para as ações */
+.AcaoDanger{
+    background-color: color-mix(in srgb, #ef4444 8%, var(--background));
+    border-color: color-mix(in srgb, #ef4444 22%, transparent);
+}
+.AcaoDanger .AcaoIconeWrapper{
+    background-color: color-mix(in srgb, #ef4444 16%, transparent);
+    color: #dc2626;
+}
+.AcaoDanger .AcaoTitulo{
+    color: #b91c1c;
+}
+.AcaoDanger .AcaoDescricao{
+    color: color-mix(in srgb, #b91c1c 75%, transparent);
+}
+.AcaoDanger:hover{
+    background-color: color-mix(in srgb, #ef4444 14%, var(--background));
+    border-color: #ef4444;
+    box-shadow: 0 6px 16px -3px rgba(239, 68, 68, 0.25);
+}
+
+.AcaoWarning{
+    background-color: color-mix(in srgb, #f59e0b 8%, var(--background));
+    border-color: color-mix(in srgb, #f59e0b 22%, transparent);
+}
+.AcaoWarning .AcaoIconeWrapper{
+    background-color: color-mix(in srgb, #f59e0b 16%, transparent);
+    color: #d97706;
+}
+.AcaoWarning .AcaoTitulo{
+    color: #b45309;
+}
+.AcaoWarning .AcaoDescricao{
+    color: color-mix(in srgb, #b45309 75%, transparent);
+}
+.AcaoWarning:hover{
+    background-color: color-mix(in srgb, #f59e0b 14%, var(--background));
+    border-color: #f59e0b;
+    box-shadow: 0 6px 16px -3px rgba(245, 158, 11, 0.25);
+}
+
+.AcaoInfo{
+    background-color: color-mix(in srgb, #0284c7 8%, var(--background));
+    border-color: color-mix(in srgb, #0284c7 22%, transparent);
+}
+.AcaoInfo .AcaoIconeWrapper{
+    background-color: color-mix(in srgb, #0284c7 16%, transparent);
+    color: #0284c7;
+}
+.AcaoInfo .AcaoTitulo{
+    color: #0369a1;
+}
+.AcaoInfo .AcaoDescricao{
+    color: color-mix(in srgb, #0369a1 75%, transparent);
+}
+.AcaoInfo:hover{
+    background-color: color-mix(in srgb, #0284c7 14%, var(--background));
+    border-color: #0284c7;
+    box-shadow: 0 6px 16px -3px rgba(2, 132, 199, 0.25);
+}
+
+.AcaoSuccess{
+    background-color: color-mix(in srgb, var(--primary-color) 8%, var(--background));
+    border-color: color-mix(in srgb, var(--primary-color) 22%, transparent);
+}
+.AcaoSuccess .AcaoIconeWrapper{
+    background-color: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    color: var(--primary-color);
+}
+.AcaoSuccess .AcaoTitulo{
+    color: var(--primary-color);
+}
+.AcaoSuccess .AcaoDescricao{
+    color: color-mix(in srgb, var(--primary-color) 75%, transparent);
+}
+.AcaoSuccess:hover{
+    background-color: color-mix(in srgb, var(--primary-color) 14%, var(--background));
+    border-color: var(--primary-color);
+    box-shadow: 0 6px 16px -3px color-mix(in srgb, var(--primary-color) 25%, transparent);
+}
+
+/* Compatibilidade legada */
 .AcoesBotoes{
-  display: flex;
-  width: 25vw;
-  height: 12vh;
-  border: none;
-  border-radius: 16px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  color: white;
+    display: flex;
+    width: 100%;
+    height: 10vh;
+    border: none;
+    border-radius: 14px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: white;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.AcoesBotoes:hover{
+    transform: translateY(-2px);
 }
 .AcoesBotoes p{
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-family: var(--font-be-vietnam-pro);
+    font-weight: 600;
 }
 .AcoesIcone{
-    transform: scale(2.5);
+    font-size: 1.5rem;
+}
+
+@media (max-width: 480px){
+    .AcoesGrid{
+        grid-template-columns: 1fr;
+    }
 }
 @media (max-width: 420px){
     .cabecalhoAlunos{
