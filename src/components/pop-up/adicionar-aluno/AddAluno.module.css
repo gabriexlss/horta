@@ -54,13 +54,6 @@
     box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
     outline: none !important;
 }
-.mensagemErro{
-    color: #dc2626;
-    font-size: 0.8rem;
-    font-family: var(--font-be-vietnam-pro);
-    font-weight: 600;
-    margin-top: 4px;
-}
 .PopUpAdmin{
 
     display: flex;
@@ -150,4 +143,3 @@ input:checked + .slider:before {
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
 }
-

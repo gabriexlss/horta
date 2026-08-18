@@ -1,6 +1,5 @@
 'use client'
 
-import { useState, useRef } from "react"
 import { MdClose } from "react-icons/md"
 import Popup from "../Popup"
 import styles from "./RemoverAluno.module.css"
@@ -13,41 +12,30 @@ interface RemoverAlunoProps {
 }
 
 function RemoverAluno({ alunoNome, carregando = false, onCancelar, onConfirmar }: RemoverAlunoProps) {
-    const [executando, setExecutando] = useState(false)
-    const confirmadoRef = useRef(false)
-
-    const isBusy = carregando || executando
-
     const handleConfirmar = (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
 
-        // Trava síncrona imediata contra spam de cliques
-        if (confirmadoRef.current || isBusy) {
-            return
-        }
-
-        confirmadoRef.current = true
-        setExecutando(true)
+        if (carregando) return
         onConfirmar()
     }
 
     const handleCancelar = (e: React.MouseEvent) => {
         e.preventDefault()
         e.stopPropagation()
-        if (isBusy) return
+        if (carregando) return
         onCancelar()
     }
 
     return (
-        <Popup className={styles.modal} labelledBy="titulo-excluir-aluno" onClose={isBusy ? () => {} : onCancelar}>
+        <Popup className={styles.modal} labelledBy="titulo-excluir-aluno" onClose={carregando ? () => {} : onCancelar}>
             <header className={styles.header}>
                 <h1 id="titulo-excluir-aluno">Excluir aluno</h1>
                 <button 
                     aria-label="Fechar" 
                     className={styles.close} 
                     onClick={handleCancelar} 
-                    disabled={isBusy} 
+                    disabled={carregando}
                     type="button"
                 >
                     <MdClose />
@@ -60,7 +48,7 @@ function RemoverAluno({ alunoNome, carregando = false, onCancelar, onConfirmar }
                 <button 
                     className={styles.cancel} 
                     onClick={handleCancelar} 
-                    disabled={isBusy} 
+                    disabled={carregando}
                     type="button"
                 >
                     Cancelar
@@ -68,10 +56,10 @@ function RemoverAluno({ alunoNome, carregando = false, onCancelar, onConfirmar }
                 <button 
                     className={styles.delete} 
                     onClick={handleConfirmar} 
-                    disabled={isBusy} 
+                    disabled={carregando}
                     type="button"
                 >
-                    {isBusy ? "Removendo..." : "Remover aluno"}
+                    {carregando ? "Removendo..." : "Remover aluno"}
                 </button>
             </footer>
         </Popup>
@@ -79,5 +67,3 @@ function RemoverAluno({ alunoNome, carregando = false, onCancelar, onConfirmar }
 }
 
 export default RemoverAluno
-
-

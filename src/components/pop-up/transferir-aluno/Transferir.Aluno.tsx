@@ -3,8 +3,6 @@ import { useState } from 'react';
 import { MdClose, MdMultipleStop, MdPriorityHigh } from "react-icons/md"
 import Popup from "../Popup"
 import { alunoCriar } from '@/schemas/aluno.schema';
-import { notify } from "@/services/toastify"
-import { useRouter } from "next/navigation"
 import styles from "./Transferir.Aluno.module.css"
 
 interface membroEquipe {

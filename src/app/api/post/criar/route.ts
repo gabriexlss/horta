@@ -6,6 +6,11 @@ import { randomUUID } from "crypto"
 import { r2, BUCKET_NAME, PUBLIC_URL } from "@/lib/r2";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
+const ehWebp = (buffer: Buffer) =>
+    buffer.length >= 12 &&
+    buffer.toString("ascii", 0, 4) === "RIFF" &&
+    buffer.toString("ascii", 8, 12) === "WEBP"
+
 export async function POST(req: NextRequest) {
     const res = NextResponse
     try {
@@ -37,15 +42,17 @@ export async function POST(req: NextRequest) {
             const arrayBuffer = await imagem_file.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
 
-            // 2. Extrai o nome e extensão diretamente das propriedades nativas do File
-            const extensao = imagem_file.name ? imagem_file.name.split('.').pop() : 'bin';
-            fileKey = `imagens/${randomUUID()}.${extensao}`;
+            if (!ehWebp(buffer)) {
+                return res.json({ msg: "A imagem enviada não é um arquivo WebP válido." }, { status: 400 })
+            }
+
+            fileKey = `imagens/${randomUUID()}.webp`;
 
             const comando = new PutObjectCommand({
                 Bucket: BUCKET_NAME,
                 Key: fileKey,
                 Body: buffer,
-                ContentType: imagem_file.type || 'application/octet-stream',
+                ContentType: "image/webp",
             })
             await r2.send(comando)
 

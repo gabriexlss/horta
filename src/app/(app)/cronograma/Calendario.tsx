@@ -8,7 +8,6 @@ import Legenda from "./legenda";
 import { Fragment, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { Cronograma, membroEquipe } from "@/schemas/interfacesGlobais"
-import TransferirAluno from "@/components/pop-up/transferir-aluno/Transferir.Aluno"
 
 
 interface CalendarioProps {

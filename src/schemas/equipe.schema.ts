@@ -3,15 +3,15 @@ import { z } from "zod"
 export const EquipeSchema = z.object({
     id: z.number().int().positive(),
     nome: z
-        .string({ required_error: "O nome da equipe é obrigatório." })
+        .string("O nome da equipe é obrigatório.")
         .trim()
         .min(2, "O nome da equipe deve ter no mínimo 2 caracteres.")
-        .max(15, "O nome da equipe não pode exceder 15 caracteres (limite do banco)."),
+        .max(15, "O nome da equipe não pode exceder 15 caracteres."),
     cor: z
-        .string({ required_error: "A cor da equipe é obrigatória." })
+        .string("A cor da equipe é obrigatória.")
         .trim()
         .min(3, "O código de cor deve ter no mínimo 3 caracteres.")
-        .max(10, "O código de cor não pode exceder 10 caracteres (limite do banco)."),
+        .max(10, "O código de cor não pode exceder 10 caracteres."),
     created_at: z.string().optional()
 
 })

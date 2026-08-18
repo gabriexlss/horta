@@ -21,6 +21,8 @@ const Actions = ({ onDelete, onWarning }: ActionsProps) => {
           aria-label="Deletar cronograma"
           className={`${styles.AcaoBotao} ${styles.AcaoDanger}`}
           onClick={onDelete}
+          disabled={!onDelete}
+          title={!onDelete ? "Ação ainda não conectada" : undefined}
         >
           <div className={styles.AcaoIconeWrapper}>
             <MdDeleteOutline />
@@ -36,6 +38,8 @@ const Actions = ({ onDelete, onWarning }: ActionsProps) => {
           aria-label="Registrar imprevisto no cronograma"
           className={`${styles.AcaoBotao} ${styles.AcaoWarning}`}
           onClick={onWarning}
+          disabled={!onWarning}
+          title={!onWarning ? "Ação ainda não conectada" : undefined}
         >
           <div className={styles.AcaoIconeWrapper}>
             <MdWarningAmber />

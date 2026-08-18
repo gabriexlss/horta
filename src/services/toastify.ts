@@ -2,8 +2,8 @@ import { Bounce, toast, ToastOptions, Id } from "react-toastify";
 
 export const notify = {
     sucesso: (mensagem: string, options?: ToastOptions) => {
-        const id: Id = options?.toastId || mensagem;
-        if (toast.isActive(id)) {
+        const id: Id | undefined = options?.toastId;
+        if (id !== undefined && toast.isActive(id)) {
             return;
         }
 
@@ -17,13 +17,13 @@ export const notify = {
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            toastId: id,
+            ...(id !== undefined ? { toastId: id } : {}),
             ...options
         });
     },
     erro: (mensagem: string, options?: ToastOptions) => {
-        const id: Id = options?.toastId || mensagem;
-        if (toast.isActive(id)) {
+        const id: Id | undefined = options?.toastId;
+        if (id !== undefined && toast.isActive(id)) {
             return;
         }
 
@@ -37,7 +37,7 @@ export const notify = {
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            toastId: id,
+            ...(id !== undefined ? { toastId: id } : {}),
             ...options
         });
     }

@@ -6,7 +6,6 @@ import CropPopup from "./CropPopup"
 import Image from "next/image"
 import { membroEquipe } from "@/schemas/interfacesGlobais"
 import { notify } from "@/services/toastify"
-import { CriarPostSchema } from "@/schemas/post.schema"
 import { useRouter } from "next/navigation"
 
 interface FormularioProps {
@@ -22,7 +21,7 @@ const Formulario = ({ equipes }: FormularioProps) => {
     const [data, setData] = useState<string>(dataFormatada)
     const [titulo, setTitulo] = useState<string>("")
     const [descricao, setDescricao] = useState<string>("")
-    const [erros, setErros] = useState<Record<string, string>>({})
+    const [erroSelecaoImagem, setErroSelecaoImagem] = useState(false)
 
     const enviandoRef = useRef(false)
     const inputRef = useRef<HTMLInputElement>(null)
@@ -32,16 +31,15 @@ const Formulario = ({ equipes }: FormularioProps) => {
     const [previewImagem, setPreviewImagem] = useState<string | null>(null)
 
     const router = useRouter()
-
-    const limparErro = (campo: string) => {
-        if (erros[campo]) {
-            setErros(prev => {
-                const copia = { ...prev }
-                delete copia[campo]
-                return copia
-            })
-        }
-    }
+    const tituloValido = titulo.trim().length >= 3 && titulo.length <= 50
+    const descricaoValida = descricao.trim().length >= 5
+    const dataValida = Boolean(data)
+    const equipeValida = equipes.some(({ id }) => id === equipe)
+    const imagemValida = Boolean(imagemRecortada) && !erroSelecaoImagem
+    const mostrarErroTitulo = titulo.length > 0 && !tituloValido
+    const mostrarErroDescricao = descricao.length > 0 && !descricaoValida
+    const mostrarErroData = Boolean(data) && !dataValida
+    const formValido = tituloValido && descricaoValida && dataValida && equipeValida && imagemValida
 
     function abrirSeletor() {
         if (enviando) return
@@ -53,18 +51,18 @@ const Formulario = ({ equipes }: FormularioProps) => {
         if (!arquivo) return
 
         if (!arquivo.type.startsWith("image/")) {
-            setErros(prev => ({ ...prev, imagem_file: "Selecione um arquivo de imagem válido (PNG, JPEG ou WebP)." }))
+            setErroSelecaoImagem(true)
             event.target.value = ""
             return
         }
 
         if (arquivo.size > 10 * 1024 * 1024) {
-            setErros(prev => ({ ...prev, imagem_file: "A imagem original é muito grande. Escolha uma imagem de até 10MB." }))
+            setErroSelecaoImagem(true)
             event.target.value = ""
             return
         }
 
-        limparErro("imagem_file")
+        setErroSelecaoImagem(false)
         const leitor = new FileReader()
         leitor.onload = () => setImagemParaRecortar(leitor.result as string)
         leitor.readAsDataURL(arquivo)
@@ -73,7 +71,7 @@ const Formulario = ({ equipes }: FormularioProps) => {
 
     function salvarImagemRecortada(imagem: File) {
         setImagemRecortada(imagem)
-        limparErro("imagem_file")
+        setErroSelecaoImagem(false)
         const leitor = new FileReader()
         leitor.onload = () => setPreviewImagem(leitor.result as string)
         leitor.readAsDataURL(imagem)
@@ -85,38 +83,17 @@ const Formulario = ({ equipes }: FormularioProps) => {
 
         if (enviando || enviandoRef.current) return
 
-        // 1. Validação no Frontend com Zod
-        const payload = {
-            equipe_id: Number(equipe),
-            titulo: titulo.trim(),
-            descricao: descricao.trim(),
-            imagem_file: imagemRecortada,
-            data
-        }
+        if (!formValido || !imagemRecortada) return
 
-        const validacao = CriarPostSchema.safeParse(payload)
-        if (!validacao.success) {
-            const novosErros: Record<string, string> = {}
-            validacao.error.issues.forEach(issue => {
-                const campo = issue.path[0] as string
-                if (campo && !novosErros[campo]) {
-                    novosErros[campo] = issue.message
-                }
-            })
-            setErros(novosErros)
-            return
-        }
-
-        setErros({})
         enviandoRef.current = true
         setEnviando(true)
 
         const corpo = new FormData()
-        corpo.append("equipe_id", validacao.data.equipe_id.toString())
-        corpo.append("titulo", validacao.data.titulo)
-        corpo.append("descricao", validacao.data.descricao)
-        corpo.append("imagem_file", validacao.data.imagem_file)
-        corpo.append("data", validacao.data.data)
+        corpo.append("equipe_id", equipe.toString())
+        corpo.append("titulo", titulo.trim())
+        corpo.append("descricao", descricao.trim())
+        corpo.append("imagem_file", imagemRecortada)
+        corpo.append("data", data)
 
         try {
             const response = await fetch('/api/post/criar', {
@@ -130,7 +107,7 @@ const Formulario = ({ equipes }: FormularioProps) => {
                 setDescricao("")
                 setImagemRecortada(null)
                 setPreviewImagem(null)
-                setErros({})
+                setErroSelecaoImagem(false)
                 router.refresh()
             } else {
                 notify.erro(resposta.msg || "Erro ao criar post")
@@ -148,7 +125,7 @@ const Formulario = ({ equipes }: FormularioProps) => {
             <div className={styles.campoImagem}>
                 <button 
                     type="button" 
-                    className={`${styles.imagem} ${erros.imagem_file ? styles.imagemErro : ""}`} 
+                    className={`${styles.imagem} ${erroSelecaoImagem ? styles.imagemErro : ""}`}
                     onClick={abrirSeletor} 
                     aria-label="Adicionar foto da horta" 
                     disabled={enviando}
@@ -162,8 +139,16 @@ const Formulario = ({ equipes }: FormularioProps) => {
                         </>
                     )}
                 </button>
-                {erros.imagem_file && <span className={styles.mensagemErro}>{erros.imagem_file}</span>}
-                <input type="file" name="imagem" id="imagem" accept="image/png,image/jpeg,image/webp" ref={inputRef} onChange={selecionarImagem} disabled={enviando} />
+                <input
+                    type="file"
+                    name="imagem"
+                    id="imagem"
+                    accept="image/*"
+                    ref={inputRef}
+                    onChange={selecionarImagem}
+                    disabled={enviando}
+                    aria-invalid={erroSelecaoImagem}
+                />
             </div>
 
             <div className={styles.campo}>
@@ -174,17 +159,14 @@ const Formulario = ({ equipes }: FormularioProps) => {
                     name="titulo"
                     placeholder="Digite o título do post" 
                     value={titulo} 
-                    onChange={(e) => {
-                        setTitulo(e.target.value)
-                        limparErro("titulo")
-                    }} 
+                    onChange={(e) => setTitulo(e.target.value)}
                     minLength={3}
                     maxLength={50}
                     disabled={enviando}
                     required
-                    className={erros.titulo ? styles.inputErro : ""}
+                    className={mostrarErroTitulo ? styles.inputErro : ""}
+                    aria-invalid={mostrarErroTitulo}
                 />
-                {erros.titulo && <span className={styles.mensagemErro}>{erros.titulo}</span>}
             </div>
 
             <div className={styles.campo}>
@@ -194,16 +176,13 @@ const Formulario = ({ equipes }: FormularioProps) => {
                     id="descricao" 
                     placeholder="Digite uma descrição do que foi realizado nesse post." 
                     value={descricao} 
-                    onChange={(e) => {
-                        setDescricao(e.target.value)
-                        limparErro("descricao")
-                    }}
+                    onChange={(e) => setDescricao(e.target.value)}
                     minLength={5}
                     disabled={enviando}
                     required
-                    className={erros.descricao ? styles.inputErro : ""}
+                    className={mostrarErroDescricao ? styles.inputErro : ""}
+                    aria-invalid={mostrarErroDescricao}
                 />
-                {erros.descricao && <span className={styles.mensagemErro}>{erros.descricao}</span>}
             </div>
 
             <div className={styles.campo}>
@@ -212,15 +191,12 @@ const Formulario = ({ equipes }: FormularioProps) => {
                     type="date" 
                     id="dias" 
                     value={data} 
-                    onChange={(e) => {
-                        setData(e.target.value)
-                        limparErro("data")
-                    }} 
+                    onChange={(e) => setData(e.target.value)}
                     disabled={enviando}
                     required
-                    className={erros.data ? styles.inputErro : ""}
+                    className={mostrarErroData ? styles.inputErro : ""}
+                    aria-invalid={mostrarErroData}
                 />
-                {erros.data && <span className={styles.mensagemErro}>{erros.data}</span>}
             </div>
 
             <div className={styles.campo}>
@@ -229,29 +205,33 @@ const Formulario = ({ equipes }: FormularioProps) => {
                     name="equipe" 
                     id="equipe" 
                     value={equipe} 
-                    onChange={(e) => {
-                        setEquipe(Number(e.target.value))
-                        limparErro("equipe_id")
-                    }} 
+                    onChange={(e) => setEquipe(Number(e.target.value))}
                     disabled={enviando || equipes.length === 0}
                     required
-                    className={erros.equipe_id ? styles.inputErro : ""}
+                    className={equipe > 0 && !equipeValida ? styles.inputErro : ""}
+                    aria-invalid={equipe > 0 && !equipeValida}
                 >
                     {equipes.map(e => (
                         <option value={e.id} key={e.id}>{e.nome}</option>
                     ))}
                 </select>
-                {erros.equipe_id && <span className={styles.mensagemErro}>{erros.equipe_id}</span>}
             </div>
 
             <div className={styles.campo}>
-                <button type="submit" disabled={enviando || equipes.length === 0}>
+                <button type="submit" disabled={enviando || !formValido}>
                     <MdSend className={styles.botaoIcone} />
                     {enviando ? "Publicando..." : "Publicar no Feed"}
                 </button>
             </div>
         </form>
-        {imagemParaRecortar && <CropPopup image={imagemParaRecortar} fechar={() => setImagemParaRecortar(null)} onConfirmar={salvarImagemRecortada} />}
+        {imagemParaRecortar && (
+            <CropPopup
+                image={imagemParaRecortar}
+                fechar={() => setImagemParaRecortar(null)}
+                onConfirmar={salvarImagemRecortada}
+                onErro={() => setErroSelecaoImagem(true)}
+            />
+        )}
     </>
 }
 

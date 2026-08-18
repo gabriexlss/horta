@@ -21,6 +21,8 @@ const Actions = ({ onDelete, onEdit }: ActionsProps) => {
           aria-label="Deletar publicação"
           className={`${styles.AcaoBotao} ${styles.AcaoDanger}`}
           onClick={onDelete}
+          disabled={!onDelete}
+          title={!onDelete ? "Ação ainda não conectada" : undefined}
         >
           <div className={styles.AcaoIconeWrapper}>
             <MdDeleteOutline />
@@ -36,6 +38,8 @@ const Actions = ({ onDelete, onEdit }: ActionsProps) => {
           aria-label="Editar publicação"
           className={`${styles.AcaoBotao} ${styles.AcaoInfo}`}
           onClick={onEdit}
+          disabled={!onEdit}
+          title={!onEdit ? "Ação ainda não conectada" : undefined}
         >
           <div className={styles.AcaoIconeWrapper}>
             <MdEdit />

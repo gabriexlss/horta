@@ -57,16 +57,6 @@
     border: 2px dashed #dc2626 !important;
     background-color: color-mix(in srgb, #dc2626 5%, var(--background)) !important;
 }
-.mensagemErro{
-    color: #dc2626;
-    font-size: 0.8rem;
-    font-family: var(--font-be-vietnam-pro);
-    font-weight: 600;
-    margin-top: 2px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
 .campo label{
     font-family: var(--font-be-vietnam-pro);
     font-size: 0.9rem;
@@ -98,6 +88,10 @@
     align-items: center;
     justify-content: center;
     gap: 12px;
+}
+.campo button:disabled{
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 .imagem{
     width: 300px;
@@ -347,6 +341,15 @@
 }
 .AcaoBotao:active{
     transform: translateY(0) scale(0.98);
+}
+.AcaoBotao:disabled{
+    cursor: not-allowed;
+    filter: grayscale(0.65);
+    opacity: 0.55;
+}
+.AcaoBotao:disabled:hover{
+    box-shadow: none;
+    transform: none;
 }
 .AcaoIconeWrapper{
     display: flex;

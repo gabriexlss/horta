@@ -4,7 +4,6 @@ import styles from "../admin.module.css"
 import { membroEquipe } from "@/schemas/interfacesGlobais"
 import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
-import { cronogramaCriarSchema } from "@/schemas/cronograma.schema"
 
 interface cronogramaProps {
     equipes: membroEquipe[]
@@ -17,48 +16,22 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
     const [equipe, setEquipe] = useState(() => equipes[0]?.id ?? 1)
     const [data, setData] = useState<string>(dataFormatada)
     const [tarefa, setTarefa] = useState<string>("")
-    const [erros, setErros] = useState<Record<string, string>>({})
     const [enviando, setEnviando] = useState(false)
     const enviandoRef = useRef(false)
 
     const router = useRouter()
-
-    const limparErro = (campo: string) => {
-        if (erros[campo]) {
-            setErros(prev => {
-                const copia = { ...prev }
-                delete copia[campo]
-                return copia
-            })
-        }
-    }
+    const dataValida = Boolean(data)
+    const equipeValida = equipes.some(({ id }) => id === equipe)
+    const tarefaValida = tarefa.trim().length >= 5 && tarefa.length <= 2000
+    const mostrarErroData = Boolean(data) && !dataValida
+    const mostrarErroTarefa = tarefa.length > 0 && !tarefaValida
+    const formValido = dataValida && equipeValida && tarefaValida
 
     const enviarForm = async (evento: FormEvent<HTMLFormElement>) => {
         evento.preventDefault()
 
         if (enviando || enviandoRef.current) return
 
-        // 1. Validação no Frontend com Zod
-        const payload = {
-            tarefa: tarefa.trim(),
-            equipe_id: Number(equipe),
-            data
-        }
-
-        const validacao = cronogramaCriarSchema.safeParse(payload)
-        if (!validacao.success) {
-            const novosErros: Record<string, string> = {}
-            validacao.error.issues.forEach(issue => {
-                const campo = issue.path[0] as string
-                if (campo && !novosErros[campo]) {
-                    novosErros[campo] = issue.message
-                }
-            })
-            setErros(novosErros)
-            return
-        }
-
-        setErros({})
         enviandoRef.current = true
         setEnviando(true)
 
@@ -68,7 +41,11 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify(validacao.data)
+                body: JSON.stringify({
+                    tarefa: tarefa.trim(),
+                    equipe_id: equipe,
+                    data
+                })
             })
             const dados = await response.json()
             if (!response.ok) {
@@ -79,7 +56,6 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
             if (response.ok) {
                 notify.sucesso(dados.msg || "Cronograma criado com sucesso")
                 setTarefa("")
-                setErros({})
                 router.refresh()
             }
         } catch {
@@ -97,15 +73,12 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
                     type="date" 
                     id="dias" 
                     value={data} 
-                    onChange={(e) => {
-                        setData(e.target.value)
-                        limparErro("data")
-                    }} 
+                    onChange={(e) => setData(e.target.value)}
                     disabled={enviando}
-                    required 
-                    className={erros.data ? styles.inputErro : ""}
+                    required
+                    className={mostrarErroData ? styles.inputErro : ""}
+                    aria-invalid={mostrarErroData}
                 />
-                {erros.data && <span className={styles.mensagemErro}>{erros.data}</span>}
             </div>
 
             <div className={styles.campo}>
@@ -114,19 +87,16 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
                     name="equipe" 
                     id="equipe" 
                     value={equipe} 
-                    onChange={(e) => {
-                        setEquipe(Number(e.target.value))
-                        limparErro("equipe_id")
-                    }} 
+                    onChange={(e) => setEquipe(Number(e.target.value))}
                     disabled={enviando || equipes.length === 0}
                     required
-                    className={erros.equipe_id ? styles.inputErro : ""}
+                    className={equipe > 0 && !equipeValida ? styles.inputErro : ""}
+                    aria-invalid={equipe > 0 && !equipeValida}
                 >
                     {equipes.map(e => (
                         <option value={e.id} key={e.id}>{e.nome}</option>
                     ))}
                 </select>
-                {erros.equipe_id && <span className={styles.mensagemErro}>{erros.equipe_id}</span>}
             </div>
 
             <div className={styles.campo}>
@@ -136,20 +106,17 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
                     id="tarefa" 
                     placeholder="Digite uma descrição detalhada da tarefa que essa equipe realizará no dia." 
                     value={tarefa} 
-                    onChange={(e) => {
-                        setTarefa(e.target.value)
-                        limparErro("tarefa")
-                    }} 
+                    onChange={(e) => setTarefa(e.target.value)}
                     minLength={5} 
                     maxLength={2000}
                     disabled={enviando}
                     required
-                    className={erros.tarefa ? styles.inputErro : ""}
+                    className={mostrarErroTarefa ? styles.inputErro : ""}
+                    aria-invalid={mostrarErroTarefa}
                 />
-                {erros.tarefa && <span className={styles.mensagemErro}>{erros.tarefa}</span>}
             </div>
             <div className={styles.campo}>
-                <button type="submit" disabled={enviando || equipes.length === 0}>
+                <button type="submit" disabled={enviando || !formValido || equipes.length === 0}>
                     {enviando ? "Salvando..." : "Salvar Cronograma"}
                 </button>
             </div>
@@ -158,4 +125,3 @@ const CronogramaForm = ({ equipes }: cronogramaProps) => {
 }
 
 export default CronogramaForm
-

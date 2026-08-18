@@ -10,6 +10,7 @@ interface CropPopupProps {
     image: string;
     fechar: () => void;
     onConfirmar: (imagem: File) => void;
+    onErro: (mensagem: string) => void;
 }
 
 const criarImagem = (src: string) => new Promise<HTMLImageElement>((resolve, reject) => {
@@ -22,8 +23,10 @@ const criarImagem = (src: string) => new Promise<HTMLImageElement>((resolve, rej
 async function gerarImagemRecortada(imageSrc: string, area: Area) {
     const image = await criarImagem(imageSrc)
     const canvas = document.createElement("canvas")
-    canvas.width = area.width
-    canvas.height = area.height
+    const maiorDimensao = 1600
+    const escala = Math.min(1, maiorDimensao / Math.max(area.width, area.height))
+    canvas.width = Math.round(area.width * escala)
+    canvas.height = Math.round(area.height * escala)
 
     const context = canvas.getContext("2d")
     if (!context) {
@@ -38,8 +41,8 @@ async function gerarImagemRecortada(imageSrc: string, area: Area) {
         area.height,
         0,
         0,
-        area.width,
-        area.height,
+        canvas.width,
+        canvas.height,
     )
 
     return new Promise<Blob>((resolve, reject) => {
@@ -50,7 +53,7 @@ async function gerarImagemRecortada(imageSrc: string, area: Area) {
     })
 }
 
-const CropPopup = ({ image, fechar, onConfirmar }: CropPopupProps) => {
+const CropPopup = ({ image, fechar, onConfirmar, onErro }: CropPopupProps) => {
     const [crop, setCrop] = useState({ x: 0, y: 0 })
     const [zoom, setZoom] = useState(1)
     const [areaRecortada, setAreaRecortada] = useState<Area | null>(null)
@@ -63,6 +66,9 @@ const CropPopup = ({ image, fechar, onConfirmar }: CropPopupProps) => {
         try {
             const imagemWebp = await gerarImagemRecortada(image, areaRecortada)
             onConfirmar(new File([imagemWebp], "foto-da-horta.webp", { type: "image/webp" }))
+        } catch {
+            onErro("Não foi possível processar esta imagem. Escolha outro arquivo de imagem.")
+            fechar()
         } finally {
             setProcessando(false)
         }

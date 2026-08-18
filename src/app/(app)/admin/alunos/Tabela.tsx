@@ -34,16 +34,14 @@ const Tabela = ({ alunos, equipe }: tabelaProps) => {
                 notify.erro(resposta.msg || "Erro ao excluir aluno", { toastId: `aluno-erro-${id}` })
             } else if (response.ok) {
                 notify.sucesso(resposta.msg || "Aluno removido com sucesso", { toastId: `aluno-sucesso-${id}` })
+                setAlunoParaRemover(null)
+                router.refresh()
             }
         } catch {
             notify.erro("Erro desconhecido ao deletar Aluno", { toastId: `aluno-erro-desconhecido-${id}` })
         } finally {
-            router.refresh()
-            setAlunoParaRemover(null)
             setRemovendo(false)
-            setTimeout(() => {
-                alunosEmExclusao.current.delete(id)
-            }, 1000)
+            alunosEmExclusao.current.delete(id)
         }
     }
 

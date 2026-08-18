@@ -3,7 +3,6 @@ import { useState, useRef, FormEvent } from 'react';
 import styles from './AddAluno.module.css'
 import { MdClose } from "react-icons/md"
 import Popup from "../Popup"
-import { alunoCriarSchema } from '@/schemas/aluno.schema';
 import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
 
@@ -19,54 +18,29 @@ interface PopUpProps {
 }
 function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
     const [nome, setNome] = useState("")
-    const [equipeId, setEquipeId] = useState<number>(() => equipes[0]?.id ?? 1)
+    const [equipeId, setEquipeId] = useState<number>(() => equipes[0]?.id ?? 0)
     const [admin, setAdmin] = useState<boolean>(false)
     const [senha, setSenha] = useState("")
-    const [erros, setErros] = useState<Record<string, string>>({})
     const [enviando, setEnviando] = useState(false)
     const enviandoRef = useRef(false)
     const router = useRouter()
+    const nomeValido = nome.trim().length >= 3 && nome.length <= 50
+    const equipeValida = equipes.some(({ id }) => id === equipeId)
+    const senhaValida = !admin || (senha.trim().length >= 6 && senha.length <= 255)
+    const mostrarErroNome = nome.length > 0 && !nomeValido
+    const mostrarErroSenha = admin && senha.length > 0 && !senhaValida
+    const formValido = nomeValido && equipeValida && senhaValida
 
     if (!showAddAluno) {
         return null;
-    }
-
-    const limparErro = (campo: string) => {
-        if (erros[campo]) {
-            setErros(prev => {
-                const copia = { ...prev }
-                delete copia[campo]
-                return copia
-            })
-        }
     }
 
     const handleSubmit = async (e?: FormEvent) => {
         if (e) e.preventDefault()
         if (enviandoRef.current || enviando) return
 
-        // 1. Validação no Frontend com Zod
-        const payload = {
-            nome: nome.trim(),
-            admin,
-            equipe_id: Number(equipeId),
-            senha: admin ? senha : undefined
-        }
+        if (!formValido) return
 
-        const validacao = alunoCriarSchema.safeParse(payload)
-        if (!validacao.success) {
-            const novosErros: Record<string, string> = {}
-            validacao.error.issues.forEach(issue => {
-                const campo = issue.path[0] as string
-                if (campo && !novosErros[campo]) {
-                    novosErros[campo] = issue.message
-                }
-            })
-            setErros(novosErros)
-            return
-        }
-
-        setErros({})
         enviandoRef.current = true
         setEnviando(true)
 
@@ -76,7 +50,12 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                 headers: {
                     'content-type': 'application/json'
                 },
-                body: JSON.stringify(validacao.data)
+                body: JSON.stringify({
+                    nome: nome.trim(),
+                    admin,
+                    equipe_id: equipeId,
+                    senha: admin ? senha : undefined
+                })
             })
             const dados = await response.json()
             if (!response.ok) {
@@ -86,7 +65,6 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                 setNome("")
                 setSenha("")
                 setAdmin(false)
-                setErros({})
                 closeShowAddAluno()
                 router.refresh()
             }
@@ -122,17 +100,14 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                         name="nome"
                         placeholder="Ex: João Silva" 
                         value={nome} 
-                        onChange={e => {
-                            setNome(e.target.value)
-                            limparErro("nome")
-                        }} 
+                        onChange={e => setNome(e.target.value)}
                         minLength={3}
                         maxLength={50}
                         required
                         disabled={enviando}
-                        className={erros.nome ? styles.inputErro : ""}
+                        className={mostrarErroNome ? styles.inputErro : ""}
+                        aria-invalid={mostrarErroNome}
                     />
-                    {erros.nome && <span className={styles.mensagemErro}>{erros.nome}</span>}
                 </div>
 
                 <div className={styles.PopUpAdmin}>
@@ -142,10 +117,7 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                             type="checkbox" 
                             id="admin" 
                             checked={admin} 
-                            onChange={e => {
-                                setAdmin(e.target.checked)
-                                limparErro("senha")
-                            }} 
+                            onChange={e => setAdmin(e.target.checked)}
                             disabled={enviando}
                         />
                         <span className={styles.slider}></span>
@@ -161,17 +133,14 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                             name="senha"
                             placeholder="Mínimo 6 caracteres" 
                             value={senha} 
-                            onChange={e => {
-                                setSenha(e.target.value)
-                                limparErro("senha")
-                            }} 
+                            onChange={e => setSenha(e.target.value)}
                             minLength={6}
                             maxLength={255}
                             required={admin}
                             disabled={enviando}
-                            className={erros.senha ? styles.inputErro : ""}
+                            className={mostrarErroSenha ? styles.inputErro : ""}
+                            aria-invalid={mostrarErroSenha}
                         />
-                        {erros.senha && <span className={styles.mensagemErro}>{erros.senha}</span>}
                     </div>
                 )}
 
@@ -181,23 +150,20 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
                         name="equipe" 
                         id="equipe" 
                         value={equipeId} 
-                        onChange={e => {
-                            setEquipeId(Number(e.target.value))
-                            limparErro("equipe_id")
-                        }}
-                        disabled={enviando}
+                        onChange={e => setEquipeId(Number(e.target.value))}
+                        disabled={enviando || equipes.length === 0}
                         required
-                        className={erros.equipe_id ? styles.inputErro : ""}
+                        className={equipeId > 0 && !equipeValida ? styles.inputErro : ""}
+                        aria-invalid={equipeId > 0 && !equipeValida}
                     >
                         {equipes.map(e => (
                             <option key={e.id} value={e.id}>{e.nome}</option>
                         ))}
                     </select>
-                    {erros.equipe_id && <span className={styles.mensagemErro}>{erros.equipe_id}</span>}
                 </div>
 
                 <div className={styles.PopUpButtons}>
-                    <button type="submit" disabled={enviando}>
+                    <button type="submit" disabled={enviando || !formValido}>
                         {enviando ? "Salvando..." : "Salvar Aluno"}
                     </button>
                     <button onClick={closeShowAddAluno} disabled={enviando} type="button">
@@ -210,4 +176,3 @@ function Adicionar({ showAddAluno, closeShowAddAluno, equipes }: PopUpProps) {
 }
 
 export default Adicionar
-
