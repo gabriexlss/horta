@@ -55,7 +55,6 @@
     outline: none !important;
 }
 .PopUpAdmin{
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;

@@ -7,15 +7,10 @@ import { notify } from "@/services/toastify"
 import { useRouter } from "next/navigation"
 
 interface PopUpProps {
-    showImprevistoAgenda: boolean;
+    showImprevistoAgenda: boolean; 
     closeShowImprevistoAgenda: () => void;
     posts: any[];
 }
-interface ConfirmacaoProps {
-    showConfirmar: boolean;
-    closeShowconfirmar: () => void;
-}
-
 function ImprevistoAgenda({ showImprevistoAgenda, closeShowImprevistoAgenda, posts }: PopUpProps) {
     const [enviando, setEnviando] = useState(false);
     if (!showImprevistoAgenda) {

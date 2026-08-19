@@ -15,7 +15,6 @@ const Actions = ({ onDelete, onWarning }: ActionsProps) => {
 
   return (
     <div>
-
       <section aria-label="Ações rápidas" className={styles.Acoes}>
         <header className={styles.AcoesHeader}>
           <MdBolt className={styles.AcoesHeaderIcone} />
