@@ -36,8 +36,65 @@
     font-size: 1.75rem;
     margin-bottom: 20px;
 }
-.loginContainer .selectcontainer {
+.loginContainer h6 {
+    color: rgb(65, 65, 65);
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+.selectContainer {
+    width: 100%;
     display: flex;
+    justify-content: flex-start;
     flex-direction: column;
+    margin-bottom: 20px;
+    gap: 5px;
+}
+.selectContainer select {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    padding-left: 0.5rem;
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 1rem;
+    background-color: white;
+}
+.inputContainer{
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-bottom: 20px;
+    gap: 5px;
+}
+
+.inputContainer input {
+    width: 100%;
+    height: 2.45rem;
+    border-radius: 8px;
+    border: 1px solid var(--primary-color);
+    padding-left: 0.5rem;
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 1rem;
+}
+.buttonContainer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+.buttonContainer button {
+    width: 100%;
+    height: 2.5rem;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--font-be-vietnam-pro);
+    font-size: 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    display: flex;
     align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
