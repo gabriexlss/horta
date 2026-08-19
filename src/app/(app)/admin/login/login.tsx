@@ -1,6 +1,6 @@
 'use client'
 import styles from "./login.module.css"
-import { MdPark } from "react-icons/md"
+import { MdPark, MdArrowForward } from "react-icons/md"
 import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
 
 interface equipeProps {
@@ -18,6 +18,7 @@ const Equipe = ({ aluno }: equipeProps) => {
                 <div className={styles.selectContainer}>
                     <label htmlFor="aluno">Escolher Aluno</label>
                     <select name="aluno" id="aluno" required>
+                        <option value="" hidden>Selecione um aluno</option>
                         {aluno.map((a) => (
                             <option key={a.id} value={a.id}>{a.nome}</option>
                         ))}
@@ -25,9 +26,11 @@ const Equipe = ({ aluno }: equipeProps) => {
                 </div>
                 <div className={styles.inputContainer}>
                     <label htmlFor="senha">Senha</label>
-                    <input type="password" name="senha" id="senha" minLength={6} maxLength={255} required />
+                    <input type="password" name="senha" id="senha" minLength={6} maxLength={255} placeholder="Digite sua senha" required />
                 </div>
-                <button type="submit">Entrar no Painel</button>
+                <div className={styles.buttonContainer}>
+                    <button type="submit">Entrar no Painel <MdArrowForward style={{ fontSize: '1.25rem' }} /></button>
+                </div>
             </div>
         </section>
     )
