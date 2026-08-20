@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 interface postProps{
     titulo: string,
     corpo: string,
-    data: Date,
+    data: string,
     link: string,
     imagem: string
 }
@@ -20,7 +20,7 @@ const Post = ({titulo, corpo, data, link, imagem}: postProps) => {
         day: "2-digit",
         month: "long",
         year: "numeric",
-    }).format(data)
+    }).format(new Date(data))
     return (
         <section className={styles.post} onClick={navegar}>
             <header>

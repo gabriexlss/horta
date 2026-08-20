@@ -3,6 +3,8 @@ import { pool } from "@/lib/db"
 import { revalidatePath } from "next/cache";
 import { DeleteObjectCommand } from "@aws-sdk/client-s3";
 import { r2, BUCKET_NAME } from "@/lib/r2"
+import { getAuthenticatedAdminFromRequest } from "@/lib/auth"
+import { EditarPostSchema } from "@/schemas/post.schema"
 
 interface RouteParams {
   params: Promise<{ id: string }>; // No Next.js 15+ os params são uma Promise
@@ -10,20 +12,70 @@ interface RouteParams {
 interface dadosBanco{
     imagem_url: string
 }
+
+export async function PATCH(req: NextRequest, { params }: RouteParams) {
+    try {
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return NextResponse.json({ msg: "Não autorizado." }, { status: 401 })
+        }
+
+        const { id } = await params
+        const postId = Number(id)
+        const body: unknown = await req.json()
+        const dadosValidados = EditarPostSchema.safeParse(body)
+
+        if (!Number.isSafeInteger(postId) || postId <= 0) {
+            return NextResponse.json({ msg: "Post inválido." }, { status: 400 })
+        }
+
+        if (!dadosValidados.success) {
+            const primeiroErro = dadosValidados.error.issues[0]?.message || "Dados inválidos."
+            return NextResponse.json({ msg: primeiroErro }, { status: 400 })
+        }
+
+        const { equipe_id, titulo, descricao } = dadosValidados.data
+        const equipe = await pool.query("SELECT 1 FROM equipes WHERE id = $1 LIMIT 1", [equipe_id])
+
+        if (equipe.rowCount === 0) {
+            return NextResponse.json({ msg: "Equipe responsável não encontrada." }, { status: 404 })
+        }
+
+        const resultado = await pool.query(
+            "UPDATE posts SET equipe_id = $1, titulo = $2, descricao = $3 WHERE id = $4 RETURNING id",
+            [equipe_id, titulo, descricao, postId]
+        )
+
+        if (resultado.rowCount === 0) {
+            return NextResponse.json({ msg: "Post não encontrado." }, { status: 404 })
+        }
+
+        revalidatePath("/admin/posts")
+        revalidatePath("/")
+        revalidatePath(`/post/${postId}`)
+        return NextResponse.json({ msg: "Post editado com sucesso." })
+    } catch (error) {
+        console.error("Erro ao editar post:", error)
+        return NextResponse.json({ msg: "Erro interno do servidor." }, { status: 500 })
+    }
+}
+
 // Rota para deletar
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
     const res = NextResponse
     try{
-        const { id } = await params
-
-        // verifica se veio id
-        if(!id){
-            return res.json({msg: "id do post é necessario para deletar"},{status:400})
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({msg: "Não autorizado."}, {status: 401})
         }
 
-        // com esse id, verifica se acha alguma coluna no banco de dados
-        const searchQuery = "SELECT * FROM posts WHERE id = $1"
-        const dados = await pool.query(searchQuery, [id])
+        const { id } = await params
+        const postId = Number(id)
+
+        if (!Number.isSafeInteger(postId) || postId <= 0) {
+            return res.json({msg: "Post inválido."},{status:400})
+        }
+
+        const searchQuery = "SELECT imagem_url FROM posts WHERE id = $1"
+        const dados = await pool.query(searchQuery, [postId])
         if(dados.rowCount === 0){
             return res.json({msg: "Nenhum post encontrado com o id fornecido."},{status:404})
         }
@@ -38,7 +90,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
         await r2.send(comando)
         // apagar registros do banco de dados
         const query = "DELETE FROM posts WHERE id = $1"
-        await pool.query(query,[id])
+        await pool.query(query,[postId])
 
         // revalida cache e manda embora
         revalidatePath('/admin/posts')

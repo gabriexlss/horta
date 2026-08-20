@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .loginBg {
     background-color: var(--background);
     top: 0;
@@ -98,105 +97,15 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-=======
-.loginBg {
-    background-color: var(--background);
-    top: 0;
-    left: 0;
-    z-index: 100;
-    position: absolute;
-    height: 100vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
-
-.loginContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 75vh;
-    width: 75vw;
-    background-color: white;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    border-top: 5px solid var(--secundary-color);
+.buttonContainer button:disabled {
+    cursor: wait;
+    opacity: 0.65;
 }
-.loginContainer .loginIcon {
-    color: var(--secundary-color);
-    font-size: 4rem;
-    margin-bottom: 20px;
-    background-color: var(--primary-color);
-    border-radius: 50%;
-    border: 10px solid var(--primary-color);
-}
-.loginContainer h1 {
-    color: var(--primary-color);
-    font-size: 1.75rem;
-    margin-bottom: 20px;
-}
-.loginContainer h6 {
-    color: rgb(65, 65, 65);
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-.selectContainer {
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    margin-bottom: 20px;
-    gap: 5px;
-}
-.selectContainer select {
-    width: 100%;
-    height: 2.5rem;
-    border-radius: 8px;
-    border: 1px solid var(--primary-color);
-    padding-left: 0.5rem;
+.loginErro {
+    margin-top: 1rem;
+    color: #b91c1c;
     font-family: var(--font-be-vietnam-pro);
-    font-size: 1rem;
-    background-color: white;
-}
-.inputContainer{
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    margin-bottom: 20px;
-    gap: 5px;
-}
-
-.inputContainer input {
-    width: 100%;
-    height: 2.45rem;
-    border-radius: 8px;
-    border: 1px solid var(--primary-color);
-    padding-left: 0.5rem;
-    font-family: var(--font-be-vietnam-pro);
-    font-size: 1rem;
-}
-.buttonContainer {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-}
-.buttonContainer button {
-    width: 100%;
-    height: 2.5rem;
-    border-radius: 8px;
-    border: none;
-    font-family: var(--font-be-vietnam-pro);
-    font-size: 1rem;
-    background-color: var(--primary-color);
-    color: white;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
->>>>>>> bac6b22650544ca2f3c49c40afb9e7d1943334b6
+    font-size: 0.9rem;
+    text-align: center;
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { pool } from "@/lib/db"
 import { revalidatePath } from "next/cache";
+import { getAuthenticatedAdminFromRequest } from "@/lib/auth"
 
 interface RouteParams {
   params: Promise<{ id: string }>; // No Next.js 15+ os params são uma Promise
@@ -10,6 +11,10 @@ interface RouteParams {
 export async function DELETE(req: NextRequest, { params }: RouteParams) {
     const res = NextResponse  
     try{
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({msg: "Não autorizado."}, {status: 401})
+        }
+
         const { id } = await params
 
         // verifica se veio id
@@ -42,6 +47,10 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
 export async function PATCH(req: NextRequest, { params }: RouteParams) {
     const res = NextResponse  
     try{
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({msg: "Não autorizado."}, {status: 401})
+        }
+
         const { id } = await params
 
         // verifica se veio id

@@ -11,6 +11,23 @@
     font-size: 1.35rem;
     color: var(--primary-color);
 }
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.modalClose {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    background: transparent;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+}
 .RemoverContainer {
     width: 100%;
     display: flex;
@@ -54,6 +71,7 @@
     font-size: 1rem;
     background-color: var(--primary-color);
     color: white;
+    cursor: pointer;
 }
 .ConfirmacaoContainer{
     width: 100%;
@@ -87,4 +105,10 @@
     background-color: var(--neutral-color);
     color: var(--primary-color);
     border: 1px solid var(--primary-color);
+}
+.RemoverBotaoContainer button:disabled,
+.ConfirmacaoBotaoContainer button:disabled,
+.modalClose:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }

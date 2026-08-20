@@ -58,7 +58,7 @@ const Equipe = ({ equipe, aluno }: equipeProps) => {
                     </button>
                 </div>
             </div> 
-            {showTransferirAluno && <TransferirAluno equipes={equipe} showTransferirAluno={showTransferirAluno} closeShowTransferirAluno={() => setShowTransferirAluno(false)} />}
+            {showTransferirAluno && <TransferirAluno equipes={equipe} alunos={aluno} showTransferirAluno={showTransferirAluno} closeShowTransferirAluno={() => setShowTransferirAluno(false)} />}
         </div >
     )
 }

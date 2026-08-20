@@ -5,6 +5,7 @@ import { CriarPostSchema } from "@/schemas/post.schema"
 import { randomUUID } from "crypto"
 import { r2, BUCKET_NAME, PUBLIC_URL } from "@/lib/r2";
 import { PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { getAuthenticatedAdminFromRequest } from "@/lib/auth"
 
 const ehWebp = (buffer: Buffer) =>
     buffer.length >= 12 &&
@@ -14,6 +15,10 @@ const ehWebp = (buffer: Buffer) =>
 export async function POST(req: NextRequest) {
     const res = NextResponse
     try {
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({ msg: "Não autorizado." }, { status: 401 })
+        }
+
         const body = await req.formData()
         const formEquipeId = Number(body.get("equipe_id"))
         const formTitulo = body.get("titulo")

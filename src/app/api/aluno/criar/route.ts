@@ -3,10 +3,15 @@ import { pool } from "@/lib/db"
 import { alunoCriarSchema } from "@/schemas/aluno.schema"
 import { revalidatePath } from "next/cache";
 import bcrypt from "bcrypt"
+import { getAuthenticatedAdminFromRequest } from "@/lib/auth"
 
 export async function POST(req:NextRequest) {
     const res = NextResponse
     try{
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({msg: "Não autorizado."}, {status: 401})
+        }
+
         const body = await req.json()
         const dadosValidados  = alunoCriarSchema.safeParse(body)
 

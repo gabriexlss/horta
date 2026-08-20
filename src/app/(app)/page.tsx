@@ -1,11 +1,10 @@
 import styles from "./page.module.css";
 import { MdEco } from "react-icons/md"
 import Posts from "./Posts"
-import { pool } from "@/lib/db"
+import { get } from "@/services/get";
 
 async function Home() {
-  const query = "SELECT id, titulo, descricao, equipe_id, data, imagem_url FROM posts"
-  const posts = await pool.query(query)
+  const posts = await get.posts()
   return (
     <main>
       <div className={styles.cardApresentacao}>
@@ -20,7 +19,7 @@ async function Home() {
         <MdEco className={styles.icone} />
         <h2>Mural de Atividades</h2>
       </div>
-      <Posts post={posts.rows}/>
+      <Posts post={posts}/>
     </main>
   );
 }

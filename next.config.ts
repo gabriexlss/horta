@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     '192.168.0.102',
     '10.158.95.134',
     'localhost:3000',
+    '192.168.0.103'
   ],
   images: {
     remotePatterns: [

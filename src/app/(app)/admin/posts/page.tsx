@@ -1,15 +1,17 @@
+import { get } from "@/services/get";
 import Formulario from "./Formulario"
 import Actions from "./actions"
-import { pool } from "@/lib/db"
 
 async function Posts() {
-  const queryEquipes = "SELECT * FROM equipes ORDER BY id ASC"
-  const equipes = await pool.query(queryEquipes)
+  const [equipes, posts] = await Promise.all([
+    get.equipes(),
+    get.posts()
+  ])
 
   return (
     <section>
-      <Formulario equipes={equipes.rows}/>
-      <Actions />
+      <Formulario equipes={equipes}/>
+      <Actions posts={posts} equipes={equipes}/>
     </section>
   )
 }

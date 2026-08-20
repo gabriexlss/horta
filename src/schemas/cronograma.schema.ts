@@ -24,4 +24,4 @@ export const cronogramaCriarSchema = CronogramaSchema.pick({
 })
 
 export type cronogramaCriar = z.infer<typeof cronogramaCriarSchema>
-export type CronogramaType = z.infer<typeof CronogramaSchema>
+export type Cronograma = z.infer<typeof CronogramaSchema>

@@ -1,15 +1,17 @@
 import CronogramaForm from "./cronograma"
 import Actions from "./actions"
-import { pool } from "@/lib/db"
+import { get } from "@/services/get"
 
 async function Cronograma() {
-  const queryEquipes = "SELECT * FROM equipes ORDER BY id ASC"
-  const equipes = await pool.query(queryEquipes)
+  const [equipes, cronogramas] = await Promise.all([
+    get.equipes(),
+    get.cronogramas()
+  ])
   
   return (
     <section>
-      <CronogramaForm equipes={equipes.rows}/>
-      <Actions />
+      <CronogramaForm equipes={equipes}/>
+      <Actions cronogramas={cronogramas}/>
     </section>
   )
 }

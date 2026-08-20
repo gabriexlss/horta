@@ -49,7 +49,14 @@ export const CriarPostSchema = PostSchema.pick({
     imagem_file: imagemWebpSchema
 })
 
+export const EditarPostSchema = PostSchema.pick({
+    equipe_id: true,
+    titulo: true,
+    descricao: true,
+})
+
 export const PegarPostSchema = PostSchema
 
 export type Post = z.infer<typeof PegarPostSchema>
 export type CriarPost = z.infer<typeof CriarPostSchema>
+export type EditarPost = z.infer<typeof EditarPostSchema>

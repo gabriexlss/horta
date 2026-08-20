@@ -1,18 +1,17 @@
+import { get } from "@/services/get";
 import Calendario from "./Calendario"
-import { pool }  from "@/lib/db"
 
 export const dynamic = "force-dynamic"
 
 async function Cronograma() {
-  const queryEquipes = "SELECT * FROM equipes ORDER BY id ASC"
-  const equipes = await pool.query(queryEquipes)
-
-  const queryCronograma = "SELECT id, data, tarefa, equipe_id, imprevisto FROM cronogramas"
-  const cronogramas = await pool.query(queryCronograma)
+  const [equipes, cronogramas] = await Promise.all([
+    get.equipes(),
+    get.cronogramas()
+  ])
 
   return (
     <main>
-      <Calendario equipes={equipes.rows} cronogramas={cronogramas.rows}/>
+      <Calendario equipes={equipes} cronogramas={cronogramas}/>
     </main>
   )
 }

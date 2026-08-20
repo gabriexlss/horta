@@ -4,7 +4,7 @@ interface post{
     titulo: string,
     descricao: string,
     imagem_url: string,
-    data: Date,
+    data: string,
     equipe_id: number
 }
 interface PostsProps{
@@ -12,9 +12,12 @@ interface PostsProps{
 }
 
 const Posts = ({post}: PostsProps) => {
+    const postsAjustados = post.toSorted(
+    (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
+  )
     return (
         <section>
-            {post.map(post => (
+            {postsAjustados.map(post => (
                 <Post titulo={post.titulo} corpo={post.descricao} imagem={post.imagem_url} data={post.data} link={`/post/${post.id}`} key={post.id} />
             ))}
         </section>

@@ -1,79 +1,86 @@
 'use client'
-import { useState } from 'react';
+
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { MdClose, MdMultipleStop, MdPriorityHigh } from "react-icons/md"
 import Popup from "../Popup"
-import { alunoCriar } from '@/schemas/aluno.schema';
+import { notify } from "@/services/toastify"
+import { aluno, membroEquipe } from "@/schemas/interfacesGlobais"
 import styles from "./Transferir.Aluno.module.css"
 
-interface membroEquipe {
-    id: number,
-    nome: string,
-    cor: string
-}
 interface PopUpProps {
-    showTransferirAluno: boolean;
-    closeShowTransferirAluno: () => void;
+    showTransferirAluno: boolean
+    closeShowTransferirAluno: () => void
     equipes: membroEquipe[]
+    alunos: aluno[]
 }
-function TransferirAluno({ showTransferirAluno, closeShowTransferirAluno, equipes }: PopUpProps) {
-    const [nome, setNome] = useState("")
-    const [equipeId, setEquipeId] = useState(1)
 
-    if (!showTransferirAluno) {
-        return null;
-    }
-    const enviarForm = async (dataForm: alunoCriar) => {
-        if (!dataForm) return
+function TransferirAluno({ showTransferirAluno, closeShowTransferirAluno, equipes, alunos }: PopUpProps) {
+    const router = useRouter()
+    const [alunoId, setAlunoId] = useState<number>(0)
+    const [equipeId, setEquipeId] = useState<number>(() => equipes[0]?.id ?? 0)
+    const [enviando, setEnviando] = useState(false)
+    const alunoSelecionado = alunos.find(({ id }) => id === alunoId)
+    const formValido = Boolean(
+        alunoSelecionado &&
+        equipes.some(({ id }) => id === equipeId) &&
+        alunoSelecionado.equipe_id !== equipeId
+    )
 
-        /* try {
-            const response = await fetch('/api/aluno/criar', {
-                method: 'POST',
-                headers: {
-                    'content-type': 'application/json'
-                },
-                body: JSON.stringify(dataForm)
+    if (!showTransferirAluno) return null
+
+    const enviarForm = async () => {
+        if (!formValido || enviando) return
+        setEnviando(true)
+
+        try {
+            const response = await fetch(`/api/aluno/${alunoId}`, {
+                method: 'PATCH',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ equipe_id: equipeId }),
             })
-            const dados = await response.json()
+            const dados = await response.json() as { msg?: string }
+
             if (!response.ok) {
-                notify.erro(dados.msg)
-            } else if(response.ok){
-                notify.sucesso(dados.msg)
+                notify.erro(dados.msg || "Erro ao transferir aluno.")
+                return
             }
-        } catch {
-            notify.erro("Erro ao processar a solicitação de transferir")
-        } finally {
-            router.push('/admin/alunos')
+
+            notify.sucesso(dados.msg || "Aluno transferido com sucesso.")
             closeShowTransferirAluno()
-        } */
+            router.refresh()
+        } catch {
+            notify.erro("Erro ao processar a transferência.")
+        } finally {
+            setEnviando(false)
+        }
     }
+
     return (
-        <Popup className={styles.AddPopUpContent} labelledBy="titulo-adicionar-aluno" onClose={closeShowTransferirAluno}>
+        <Popup className={styles.AddPopUpContent} labelledBy="titulo-transferir-aluno" onClose={enviando ? () => {} : closeShowTransferirAluno}>
             <div className={styles.PopUpHeader}>
-                <button aria-label="Fechar" className={styles.modalClose} onClick={closeShowTransferirAluno} type="button">
+                <button aria-label="Fechar" className={styles.modalClose} onClick={closeShowTransferirAluno} disabled={enviando} type="button">
                     <MdClose />
                 </button>
-                <h1 id="titulo-adicionar-aluno">Transferir Aluno</h1>
+                <h1 id="titulo-transferir-aluno">Transferir Aluno</h1>
             </div>
             <div className={styles.PopUpSelect}>
-                <label htmlFor="nome">Selecionar Aluno</label>
-                <select name="nome" id="nome" value={nome} onChange={e => { setNome(e.target.value) }}>
+                <label htmlFor="aluno-transferencia">Selecionar Aluno</label>
+                <select id="aluno-transferencia" value={alunoId || ""} onChange={(event) => setAlunoId(Number(event.target.value))} disabled={enviando}>
                     <option value="" hidden>Selecione um aluno</option>
-                    {
-                        equipes.map(e => (
-                            <option key={e.id} value={e.id}>{e.nome}</option>
-                        ))
-                    }
+                    {alunos.map((item) => (
+                        <option key={item.id} value={item.id}>{item.nome}</option>
+                    ))}
                 </select>
             </div>
             <div className={styles.PopUpSelect}>
-                <label htmlFor="equipe">Selecionar Equipe de Destino</label>
-                <select name="equipe" id="equipe" value={equipeId} onChange={e => { setEquipeId(Number(e.target.value)) }}>
-                    <option value="" hidden>Selecione uma equipe</option>
-                    {
-                        equipes.map(e => (
-                            <option key={e.id} value={e.id}>{e.nome}</option>
-                        ))
-                    }
+                <label htmlFor="equipe-destino">Selecionar Equipe de Destino</label>
+                <select id="equipe-destino" value={equipeId} onChange={(event) => setEquipeId(Number(event.target.value))} disabled={enviando || equipes.length === 0}>
+                    {equipes.map((equipe) => (
+                        <option key={equipe.id} value={equipe.id} disabled={equipe.id === alunoSelecionado?.equipe_id}>
+                            {equipe.nome}{equipe.id === alunoSelecionado?.equipe_id ? " (equipe atual)" : ""}
+                        </option>
+                    ))}
                 </select>
             </div>
             <div className={styles.PopUpDescricao}>
@@ -81,8 +88,11 @@ function TransferirAluno({ showTransferirAluno, closeShowTransferirAluno, equipe
                 <p>Será removido da equipe atual e movido para a nova equipe selecionada.</p>
             </div>
             <div className={styles.PopUpButtons}>
-                <button onClick={() => enviarForm({ nome, admin: false, equipe_id: equipeId })} type="button">Confirmar Transferência <MdMultipleStop style={{ fontSize: '1.25rem' }}/></button>
-                <button onClick={closeShowTransferirAluno} type="button">Cancelar</button>
+                <button onClick={enviarForm} disabled={!formValido || enviando} type="button">
+                    {enviando ? "Transferindo..." : "Confirmar Transferência"}
+                    {!enviando && <MdMultipleStop style={{ fontSize: '1.25rem' }} />}
+                </button>
+                <button onClick={closeShowTransferirAluno} disabled={enviando} type="button">Cancelar</button>
             </div>
         </Popup>
     )

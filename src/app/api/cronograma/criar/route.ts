@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { revalidatePath } from "next/cache"
 import { pool } from "@/lib/db"
 import { cronogramaCriarSchema } from "@/schemas/cronograma.schema"
+import { getAuthenticatedAdminFromRequest } from "@/lib/auth"
 
 interface ErroPostgres {
     code?: string
@@ -13,6 +14,10 @@ const ehErroPostgres = (erro: unknown): erro is ErroPostgres =>
 export async function POST(req:NextRequest) {
     const res = NextResponse
     try{
+        if (!await getAuthenticatedAdminFromRequest(req)) {
+            return res.json({msg: "Não autorizado."}, {status: 401})
+        }
+
         const body = await req.json()
         const dadosValidados  = cronogramaCriarSchema.safeParse(body)
 

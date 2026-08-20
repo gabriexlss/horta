@@ -98,3 +98,8 @@
     border: 1px solid var(--primary-color);
     color: var(--primary-color);
 }
+.PopUpButtons button:disabled,
+.modalClose:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}

@@ -31,5 +31,9 @@ export const alunoCriarSchema = AlunoSchema
         path: ["senha"]
     })
 
+export const transferirAlunoSchema = z.object({
+    equipe_id: equipeIdSchema,
+})
+
 export type alunoCriar = z.infer<typeof alunoCriarSchema>
 export type Aluno = z.infer<typeof AlunoSchema>
