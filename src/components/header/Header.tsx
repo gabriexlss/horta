@@ -9,6 +9,9 @@ const Header = () => {
         if (pathname.startsWith("/post/")) {
             return "Detalhes do Post";
         }
+        if(pathname.startsWith("/equipe/")){
+            return "Detalhes da Equipe"
+        }
         switch (pathname) {
             case "/":
                 return "Feed";

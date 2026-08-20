@@ -1,14 +1,15 @@
 .navBar{
     position: fixed;
-    width: 90vw;
+    width: min(90vw, 432px);
     display: flex;
     flex-direction: row;
     bottom: 2vh;
-    left: 0;
-    right: 0;
-    margin-left: 5vw;
-    margin-right: 5vw;
+    left: 50%;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
     margin-top: 40vh;
+    transform: translateX(-50%);
     background-color: var(--neutral-color);
     box-shadow: 0 0 10px -2px black;
     border-radius: 16px;

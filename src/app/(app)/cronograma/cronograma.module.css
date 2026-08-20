@@ -42,10 +42,12 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    width: 95vw;
+    width: min(95vw, 456px);
     height: 60vh;
     background-color: var(--neutral-color);
     position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 5;
     margin-top: 1vh;
     border: 1px solid transparent;
@@ -131,8 +133,9 @@
 .fundoBlur{
     position: fixed;
     top: 0;
-    left: 0;
-    width: 100vw;
+    left: 50%;
+    width: min(100vw, 480px);
+    transform: translateX(-50%);
     height: 100vh;
     backdrop-filter: blur(5px);
     z-index: 5;

@@ -8,6 +8,7 @@ import Legenda from "./legenda";
 import { Fragment, useState } from "react";
 import { MdClose } from "react-icons/md";
 import { Cronograma, membroEquipe } from "@/schemas/interfacesGlobais"
+import EquipeBadge from "@/components/equipe-badge/EquipeBadge"
 
 
 interface CalendarioProps {
@@ -128,9 +129,7 @@ const Calendario = ({ cronogramas, equipes }: CalendarioProps) => {
                                         <div className={styles.footerTitulo} style={{ backgroundColor: tarefa.imprevisto ? "gray" : '' }}>
                                             {tarefa.imprevisto ? "Imprevisto na Equipe:" : "Equipe Responsável: "}
                                         </div>
-                                        <div style={{ backgroundColor: equipe?.cor }} className={styles.footerEquipe}>
-                                            {`Equipe ${equipe?.nome}`}
-                                        </div>
+                                        {equipe && <EquipeBadge equipeId={equipe.id} nome={equipe.nome} cor={equipe.cor} />}
                                     </footer>
                                 </Fragment>
                             );

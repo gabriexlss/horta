@@ -26,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="pt-br" className={`${quickSand.variable} ${beVietnamPro.variable}`} >
       <body>
-        {children}
+        <div className="app-shell">
+          {children}
+        </div>
         <ToastContainer />
       </body>
     </html>

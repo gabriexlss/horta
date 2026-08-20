@@ -1,18 +1,18 @@
 import { pool } from "@/lib/db";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import Image from "next/image"
 import styles from "./PostPage.module.css"
 import { Post } from "@/schemas/post.schema"
 import { MdArticle, MdCalendarMonth } from "react-icons/md"
+import EquipeBadge from "@/components/equipe-badge/EquipeBadge"
 
 async function Page({ params, }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
+    const postId = Number(id)
 
-    if (!id) {
-        redirect('/')
-    }
+    if (!Number.isSafeInteger(postId) || postId <= 0) notFound()
     const query = "SELECT id, equipe_id, titulo, descricao, data, imagem_url FROM posts WHERE id = $1"
-    const postDados = await pool.query(query, [id])
+    const postDados = await pool.query(query, [postId])
 
     if (postDados.rowCount === 0) {
         notFound()
@@ -23,7 +23,10 @@ async function Page({ params, }: { params: Promise<{ id: string }> }) {
     const queryEquipe = "SELECT nome, cor FROM equipes WHERE id = $1"
     const equipeDados = await pool.query(queryEquipe, [equipe_id])
 
-    const { nome, cor } = equipeDados.rows[0]
+    const equipe = equipeDados.rows[0]
+
+    if (!equipe) notFound()
+    const { nome, cor } = equipe
 
     const datatipoData = new Date(data)
     const dataFormatada = new Intl.DateTimeFormat("pt-BR", {
@@ -49,9 +52,7 @@ async function Page({ params, }: { params: Promise<{ id: string }> }) {
                     <div className={styles.footerTitulo}>
                         {"Equipe Responsável: "}
                     </div>
-                    <div style={{ backgroundColor: cor }} className={styles.footerEquipe}>
-                        {`Equipe ${nome}`}
-                    </div>
+                    <EquipeBadge equipeId={equipe_id} nome={nome} cor={cor} />
                 </footer>
             </section>
             <article className={styles.corpo}>

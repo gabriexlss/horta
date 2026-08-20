@@ -1,11 +1,12 @@
 .loginBg {
     background-color: var(--background);
     top: 0;
-    left: 0;
+    left: 50%;
     z-index: 100;
     position: absolute;
     height: 100vh;
-    width: 100vw;
+    width: min(100vw, 480px);
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
     align-items: center;
